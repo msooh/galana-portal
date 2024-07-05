@@ -7,7 +7,15 @@
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
         <li class="nav-title">Galana Energies Portal</li>
-       
+        <li class="nav-item">
+            <a class="btn btn-light shadow p-3 mb-4 mt-5 rounded" href="{{ route('home') }}" style="display: flex; align-items: center; margin-left:10px; margin-right:10px;">
+                <svg class="nav-icon text-dark" style="margin-right: 5px; ">
+                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top') }}"></use>
+                   
+                </svg>
+                Go To Modules
+            </a>
+        </li>
         <li class="nav-title"></li>     
       
         @can('manage_users')
