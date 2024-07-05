@@ -63,6 +63,13 @@
                             <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
                         </svg> Profile
                     </a>
+                    @can('manage_users')
+                    <a class="dropdown-item" href="{{ route('users.index') }}">
+                        <svg class="icon me-2">
+                            <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+                        </svg> Users
+                    </a>
+                    @endcan
                     <!--<a class="dropdown-item" href="#">
                         <svg class="icon me-2">
                             <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-settings') }}"></use>

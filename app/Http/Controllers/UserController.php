@@ -44,6 +44,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'phone_number' => 'required|string',
             'password' => 'required|string|min:8',
             'role' => 'required|exists:roles,id', // Ensure the selected role exists in the roles table
         ]);
@@ -52,6 +53,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
+        $user->phone_number = $validatedData['phone_number'];
         $user->password = Hash::make($validatedData['password']);
         $user->save();
 
@@ -101,12 +103,14 @@ class UserController extends Controller
         $request->validate([
             'edit_name' => 'required|string|max:255',
             'edit_email' => 'required|email|unique:users,email,'.$user->id,
+            'edit_phone' => 'required|string|max:255',
             'edit_role' => 'required|exists:roles,id',
             'edit_password' => 'nullable|string|min:8', // Optional password field
         ]);
 
         $user->name = $request->edit_name;
         $user->email = $request->edit_email;
+        $user->phone_number = $request->edit_phone;
         
         // Update password if provided
         if ($request->edit_password) {

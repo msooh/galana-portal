@@ -18,15 +18,10 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/migrate', function () {
+/*Route::get('/migrate', function () {
     Artisan::call('migrate');
     return 'Migrations have been run';
 });
-
-foreach (glob(base_path('Modules/*/Routes/web.php')) as $routeFile) {
-    require $routeFile;
-}
-
 Route::get('/test-file', function () {
     return response()->file(storage_path('app/public/police_files/1718805390_avatar.jpg'));
 });
@@ -35,6 +30,12 @@ Route::get('/create-storage-link', function () {
     $exitCode = Artisan::call('storage:link');
     return 'Storage link created!';
 });
+*/
+
+foreach (glob(base_path('Modules/*/Routes/web.php')) as $routeFile) {
+    require $routeFile;
+}
+
 
 Auth::routes();
 

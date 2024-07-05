@@ -15,6 +15,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Phone Number</th>
                                     <th>Role</th>
                                     <th>Actions</th>
                                 </tr>
@@ -25,6 +26,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>{{ $user->phone_number ?? '--' }}</td>
                                     <td>
                                         @if($user->roles->isNotEmpty())
                                             @foreach($user->roles as $role)
@@ -66,6 +68,7 @@
                                             <div class="modal-body">
                                                 <p><strong>Name:</strong> {{ $user->name }}</p>
                                                 <p><strong>Email:</strong> {{ $user->email }}</p>
+                                                <p><strong>Phone:</strong> {{ $user->phone_number }}</p>
                                                 <p><strong>Roles:</strong>
                                                     @if($user->roles->isNotEmpty())
                                                         @foreach($user->roles as $role)
@@ -107,6 +110,11 @@
                                                     <div class="mb-3">
                                                         <label for="edit_email">Email</label>
                                                         <input type="email" class="form-control" id="edit_email" name="edit_email" value="{{ $user->email }}">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="edit_phone">Phone Number</label>
+                                                        <input type="text" class="form-control" id="edit_phone" name="edit_phone" value="{{ $user->phone_number }}">
                                                     </div>
 
                                                     <div class="mb-3">
