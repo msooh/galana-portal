@@ -1,0 +1,128 @@
+body {
+    background: #eee;
+}
+
+#regForm {
+    background-color: #ffffff;
+    margin: 0 auto;   
+    font-family: Raleway;
+    padding: 40px;
+    border-radius: 10px;
+    
+}
+
+#regForm img {
+    width: 100px;
+    margin: 0 auto; 
+    display: block; 
+    margin-bottom: 10px;
+}
+
+#register {
+    color: #343b96;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+input, select, textarea {
+    padding: 10px;
+    width: 100%;
+    font-size: 18px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+    border-radius: 10px;
+    -webkit-appearance: none;
+    box-sizing: border-box; /* Ensure padding and border don't affect width */
+}
+
+.tab input:focus, .tab select:focus, .tab textarea:focus {
+    border: 1px solid #343b96 !important;
+    outline: none;
+}
+
+input.invalid, select.invalid, textarea.invalid {
+    border: 1px solid #ee1a26;
+}
+
+.tab {
+    display: none;
+}
+
+button {
+    background-color: #343b96;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+#prevBtn {
+    background-color: #bbbbbb;
+}
+
+.all-steps {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.step {
+    height: 40px;
+    width: 40px;
+    margin: 0 10px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #343b96;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step.finish {
+    color: #fff;
+    background: #343b96;
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .step {
+        height: 30px;
+        width: 30px;
+        font-size: 16px;
+        margin: 5px;
+    }
+
+    button {
+        border-radius: 20%;
+        padding: 8px 16px;
+        font-size: 15px;
+    }
+
+    #prevBtn, #nextBtn {
+        padding: 8px 16px;
+    }
+}

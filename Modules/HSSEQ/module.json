@@ -1,0 +1,11 @@
+{
+    "name": "HSSEQ",
+    "alias": "hsseq",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\HSSEQ\\Providers\\HSSEQServiceProvider"
+    ],
+    "files": []
+}

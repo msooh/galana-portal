@@ -1,0 +1,24 @@
+{
+    "name": "nwidart/retail",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {            
+            "Modules\\Retail\\": "Modules/Retail/src",
+            "Modules\\Retail\\Entities\\": "Modules/Retail/src/Entities"
+        }
+    }
+}
