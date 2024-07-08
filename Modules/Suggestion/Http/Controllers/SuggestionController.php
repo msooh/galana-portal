@@ -22,7 +22,9 @@ class SuggestionController extends Controller
 
     public function dashboard()
     {
-        return view('suggestion::dashboard');
+        $suggestions = Suggestion::orderBy('created_at', 'desc')->take(15)->get();
+       
+        return view('suggestion::dashboard', compact('suggestions'));
     }
 
     public function history()
@@ -33,8 +35,13 @@ class SuggestionController extends Controller
 
     public function getAttachment($filename)
     {
-        $file = Storage::disk('public')->get('attachments/' . $filename);
-        return response($file, 200)->header('Content-Type', Storage::disk('public')->mimeType('attachments/' . $filename));
+        $path = storage_path('app/attachments/' . $filename);
+        
+        if (file_exists($path)) {
+            return response()->file($path);
+        } else {
+            abort(404);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -57,7 +64,7 @@ class SuggestionController extends Controller
             'suggestionType' => 'required|string',
             'department' => 'nullable|string',
             'suggestion' => 'required|string',
-            'attachment' => 'nullable|file|max:2048', 
+            'attachment' => 'nullable|file|max:8192', 
             'anonymous' => 'required|string|in:Remain Anonymous,Not Anonymous',
             'name' => 'nullable|required_if:anonymous,Not Anonymous|string',
             'email' => 'nullable|required_if:anonymous,Not Anonymous|email',
@@ -72,8 +79,10 @@ class SuggestionController extends Controller
 
         // Handle file upload
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('attachments');
-            $suggestion->attachment = $path;
+            $file = $request->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('attachments'), $filename);
+            $suggestion->attachment = 'attachments/' . $filename;
         }
 
         // If anonymous is Not Anonymous, then store name and email

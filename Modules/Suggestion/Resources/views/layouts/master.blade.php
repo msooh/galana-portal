@@ -28,13 +28,16 @@
         <link href="{{ asset('css/vendors/simplebar.css') }}" rel="stylesheet">
         <link href="{{ asset('vendors/bootstrap/bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('vendors/bootstrap/css/bootstrap-toggle.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
         <link href="{{ asset('vendors/datatables/dataTables.dateTime.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
         <!-- Include SweetAlert CSS -->
         <link rel="stylesheet" href="{{ asset('vendors/sweetalerts/sweetalert2.min.css') }}">
             <!-- Main styles for this application -->
             <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+            <link href="{{ asset('css/suggestions.css') }}" rel="stylesheet">
             <!-- Examples styles (you can remove this in your application) -->
             <link href="{{ asset('css/examples.css') }}" rel="stylesheet">
             <link href="{{ asset('vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">

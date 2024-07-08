@@ -65,7 +65,7 @@
             <div class="card col-md-5 text-white bg-primary py-5">
               <div class="card-body text-center">
                 <div>        
-                    <h2 class="mb-5">Retail Portal</h2>                           
+                    <h2 class="mb-5">Galana Energies Portal</h2>                           
                     <img class="" width="300" height="auto" src="{{ asset('assets/img/Logos/horizontal_logo_logo_full_white.png') }}" alt="Galana Logo">               
                 </div>
               </div>

@@ -124,80 +124,38 @@
         <!-- /.col-->
     </div>
     <!-- /.row-->
+    <div class="col-12 dashboard">
+        <!-- Recent Activity -->
+        <div class="card mb-4">
+            <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+            </div>
 
-     <!-- Recent Activity -->
-     <div class="card mb-4">
-        <div class="filter">
-          <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-            <li class="dropdown-header text-start">
-              <h6>Filter</h6>
-            </li>
+            <div class="card-body">
+                <h5 class="card-title">Recent Suggestions <span>| Timeline</span></h5>
 
-            <li><a class="dropdown-item" href="#">Today</a></li>
-            <li><a class="dropdown-item" href="#">This Month</a></li>
-            <li><a class="dropdown-item" href="#">This Year</a></li>
-          </ul>
-        </div>
-
-        <div class="card-body">
-          <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-          <!--<div class="activity">
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">32 min</div>
-              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-              <div class="activity-content">
-                Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
-              </div>
-            </div> End activity item
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">56 min</div>
-              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-              <div class="activity-content">
-                Voluptatem blanditiis blanditiis eveniet
-              </div>
-            </div> End activity item
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">2 hrs</div>
-              <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-              <div class="activity-content">
-                Voluptates corrupti molestias voluptatem
-              </div>
-            </div> End activity item
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">1 day</div>
-              <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-              <div class="activity-content">
-                Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
-              </div>
-            </div> End activity item
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">2 days</div>
-              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-              <div class="activity-content">
-                Est sit eum reiciendis exercitationem
-              </div>
-            </div> End activity item
-
-            <div class="activity-item d-flex">
-              <div class="activite-label">4 weeks</div>
-              <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-              <div class="activity-content">
-                Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-              </div>
-            </div> End activity item
-
-          </div>-->
-
-        </div>
-      </div><!-- End Recent Activity -->
-
+                <div class="activity">
+                    @foreach($suggestions as $suggestion)
+                    <div class="activity-item d-flex">
+                        <div class="activite-label">{{ $suggestion->created_at->diffForHumans() }}</div>
+                        <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                        <div class="activity-content">
+                            {{ $suggestion->suggestion ?? '--' }}
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div><!-- End Recent Activity -->
+    </div>
     <!-- Other statistics -->
     <div class="card mb-4">
         <div class="card-body">
@@ -230,7 +188,7 @@
             <div class="row row-cols-1 row-cols-md-5 text-center">
                 <!-- Total Reports -->
                 <div class="col mb-sm-2 mb-0">
-                    <div class="text-medium-emphasis">Total Reports</div>
+                    <div class="text-medium-emphasis">Total Suggestions</div>
                     <div class="fw-semibold">100 Reports (10%)</div>
                     <div class="progress progress-thin mt-2">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -239,7 +197,7 @@
                 <!-- High Risk -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">This Month</div>
-                    <div class="fw-semibold">10 Feedback Reports (20%)</div>
+                    <div class="fw-semibold">10 Suggestions Reports (20%)</div>
                     <div class="progress progress-thin mt-2">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
@@ -247,14 +205,14 @@
                 <!-- Medium Risk -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">Last Month</div>
-                    <div class="fw-semibold">30 Feedback Reports (30%)</div>
+                    <div class="fw-semibold">30 Suggestion Reports (30%)</div>
                     <div class="progress progress-thin mt-2">
                         <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <!-- Low Risk Reports -->
                 <div class="col mb-sm-2 mb-0">
-                    <div class="text-medium-emphasis">Rating</div>
+                    <div class="text-medium-emphasis">Departments</div>
                     <div class="fw-semibold"> (15%)</div>
                     <div class="progress progress-thin mt-2">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -262,7 +220,7 @@
                 </div>
                 <!-- Visit Rate -->
                 <div class="col mb-sm-2 mb-0">
-                    <div class="text-medium-emphasis">Monthy Reporting Rate</div>
+                    <div class="text-medium-emphasis">Monthy Suggestion Rate</div>
                     <div class="fw-semibold">50%</div>
                     <div class="progress progress-thin mt-2">
                         <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>

@@ -34,8 +34,8 @@
                                 <td>{{ $suggestion->name ?? '--' }}</td>
                                 <td>{{ $suggestion->email ?? '--' }}</td>
                                 <td>
-                                    @if($suggestion->attachment_path)
-                                        <a href="{{ route('suggestions.attachment', ['filename' => $suggestion->attachment_path]) }}" target="_blank" class="btn btn-primary">View Attachment</a>
+                                    @if($suggestion->attachment)
+                                        <a href="{{ url($suggestion->attachment) }}" target="_blank" class="btn btn-primary">View <span><i class="fa fa-paperclip"></i></span></a>
                                     @else
                                         --
                                     @endif
@@ -67,7 +67,7 @@
             responsive: true,
             pagingType: 'full_numbers', 
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']], 
-            order: [[3, 'desc']], 
+            order: [[8, 'desc']], 
         });
     });
 </script>

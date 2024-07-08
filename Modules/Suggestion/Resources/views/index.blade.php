@@ -49,10 +49,15 @@
                         <p>
                             <select name="department" onchange="this.className = ''">
                                 <option value="">Select Department (optional)</option>
-                                <option value="HR">HR</option>
-                                <option value="IT">IT</option>
+                                <option value="HR & Admin">HR & Admin</option>
+                                <option value="ICT">ICT</option>
                                 <option value="Finance">Finance</option>
                                 <option value="Operations">Operations</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Lubricants">Lubricants</option>
+                                <option value="Consumer">Consumer</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Supply, Trading & Exports">Supply, Trading & Exports</option>
                             </select>
                         </p>
                     </div>

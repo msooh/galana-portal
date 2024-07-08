@@ -18,7 +18,9 @@ class StationController extends Controller
         $stations = Station::all();
         $dealers = Dealer::all();
         $users = User::all();
-        $managers = StationManager::all();
+        $managers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Station Manager');
+        })->get();
 
         return view('setup::stations.index', compact('stations', 'dealers', 'users', 'managers'));
    
@@ -27,7 +29,10 @@ class StationController extends Controller
     public function create()
     {
         $dealers = Dealer::where('active', true)->get();
-        $managers = StationManager::where('is_active', true)->get();
+        $managers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Station Manager');
+        })->get();
+        //$managers = StationManager::where('is_active', true)->get();
         $tmRoleId = Role::where('name', 'Territory Manager (TM)')->value('id');
 
         // Get users with the role ID of "Territory Manager (TM)"
