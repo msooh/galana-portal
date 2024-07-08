@@ -45,23 +45,23 @@ class HSSEQController extends Controller
 
          // Daily Reports
         $dailyReports = DB::table('safeties')
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy(DB::raw('DATE(created_at)'))
+            ->select(DB::raw('DATE(date) as date'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('DATE(date)'))
+            ->orderBy(DB::raw('DATE(date)'))
             ->pluck('count', 'date');
 
         // Monthly Reports
         $monthlyReports = DB::table('safeties')
-            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('COUNT(*) as count'))
-            ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
-            ->orderBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+            ->select(DB::raw('DATE_FORMAT(date, "%Y-%m") as month'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('DATE_FORMAT(date, "%Y-%m")'))
+            ->orderBy(DB::raw('DATE_FORMAT(date, "%Y-%m")'))
             ->pluck('count', 'month');
 
         // Yearly Reports
         $yearlyReports = DB::table('safeties')
-            ->select(DB::raw('YEAR(created_at) as year'), DB::raw('COUNT(*) as count'))
-            ->groupBy(DB::raw('YEAR(created_at)'))
-            ->orderBy(DB::raw('YEAR(created_at)'))
+            ->select(DB::raw('YEAR(date) as year'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('YEAR(date)'))
+            ->orderBy(DB::raw('YEAR(date)'))
             ->pluck('count', 'year');
 
         return view('hsseq::dashboard', compact('totalReports', 'highRiskReports', 'mediumRiskReports', 

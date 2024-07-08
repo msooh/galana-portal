@@ -23,7 +23,20 @@ class SafetyController extends Controller
      */
     public function index()
     {
-        $safetyReports = Safety::orderBy('created_at', 'desc')->get();
+        $user = auth()->user();
+        if ($user->hasRole('Admin')) {
+            // Admin can see all safety reports, ordered by descending date
+            $safetyReports = Safety::orderBy('created_at', 'desc')->get();
+        } elseif ($user->hasRole('Station Manager')) {
+            // Station Manager can only see reports for their stations, ordered by descending date
+            $safetyReports = Safety::whereHas('station', function($query) use ($user) {
+                $query->where('station_manager_id', $user->id);
+            })->orderBy('created_at', 'desc')->get();
+        } else {
+            // Default case: no safety reports
+            $safetyReports = collect();
+        }
+        
         $departments = Department::all();
         
         $usersByDepartment = User::whereHas('departments', function($query) use ($departments) {
