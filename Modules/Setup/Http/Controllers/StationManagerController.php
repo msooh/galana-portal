@@ -5,6 +5,8 @@ namespace Modules\Setup\Http\Controllers;
 use Modules\Setup\Entities\StationManager;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Models\Role;
+use App\Models\User;
 
 class StationManagerController extends Controller
 {
@@ -15,7 +17,10 @@ class StationManagerController extends Controller
      */
     public function index()
     {
-        $stationManagers = StationManager::all();
+        $stationManagers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Station Manager');
+        })->get();
+        //$stationManagers = StationManager::all();
         return view('setup::station_managers.index', compact('stationManagers'));
     }
 
@@ -37,7 +42,7 @@ class StationManagerController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        /*$validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
@@ -48,7 +53,7 @@ class StationManagerController extends Controller
         StationManager::create($validatedData);
 
         return redirect()->route('station_managers.index')
-            ->with('success', 'Station Manager created successfully.');
+            ->with('success', 'Station Manager created successfully.');*/
     }
 
     /**
@@ -84,7 +89,7 @@ class StationManagerController extends Controller
     public function update(Request $request, $id)
     {
         // Find the station manager with the given ID
-        $stationManager = StationManager::findOrFail($id);
+        $stationManager = User::findOrFail($id);
 
         // Validate the request data
         $request->validate([
@@ -96,18 +101,19 @@ class StationManagerController extends Controller
         // Update the station manager information based on the request data
         $stationManager->update([
             'name' => $request->name,
-            'phone' => $request->phone,
+            'phone_number' => $request->phone,
             'email' => $request->email,
             'updated_by' => auth()->id(),
         ]);
 
         // Redirect back to the station manager list or desired location
         return redirect()->route('station_managers.index')->with('success', 'Station Manager updated successfully');
+        
     }
 
     public function deactivate($id)
     {
-        $stationManager = StationManager::findOrFail($id);
+        $stationManager = User::findOrFail($id);
         $stationManager->is_active = false;
         $stationManager->save();
 
@@ -117,7 +123,7 @@ class StationManagerController extends Controller
 
     public function activate($id)
     {
-        $stationManager = StationManager::findOrFail($id);
+        $stationManager = User::findOrFail($id);
         $stationManager->is_active = true;
         $stationManager->save();
         
@@ -132,9 +138,9 @@ class StationManagerController extends Controller
      */
     public function destroy(StationManager $stationManager)
     {
-        $stationManager->delete();
+        /*$stationManager->delete();
 
         return redirect()->route('station_managers.index')
-            ->with('success', 'Station Manager deleted successfully.');
+            ->with('success', 'Station Manager deleted successfully.');*/
     }
 }

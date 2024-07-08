@@ -7,17 +7,16 @@
                 <div class="card">
                     <div class="card-header">Station Managers</div>
                     <div class="card-body">
-                        <div class="mb-3">
+                        <!--<div class="mb-3">
                             <a href="{{ route('station_managers.create') }}" class="btn btn-primary">Add Station Manager</a>
-                        </div>
+                        </div>-->
                         <div class="table-responsive">
                         <table class="table table-striped">                            
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Created By</th> 
+                                    <th>Email</th>                                    
                                     <th>Is Active</th>                  
                                     <th>Actions</th>
                                 </tr>
@@ -26,9 +25,8 @@
                                 @foreach($stationManagers as $manager)
                                     <tr>
                                         <td>{{ $manager->name }}</td>
-                                        <td>{{ $manager->phone }}</td>
-                                        <td>{{ $manager->email }}</td>
-                                        <td>{{ $manager->createdBy->name }}</td> 
+                                        <td>{{ $manager->phone_number }}</td>
+                                        <td>{{ $manager->email }}</td>                                        
                                         <td>
                                             @if($manager->is_active)
                                                 <span class="badge bg-success">Active</span>
@@ -76,7 +74,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="modalPhone">Phone:</label>
-                                                        <input type="text" class="form-control" id="modalPhone" value="{{ $manager->phone }}" readonly>
+                                                        <input type="text" class="form-control" id="modalPhone" value="{{ $manager->phone_number }}" readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="modalEmail">Email:</label>
@@ -110,7 +108,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="editPhone">Phone:</label>
-                                                            <input type="text" class="form-control" id="editPhone" name="phone" value="{{ $manager->phone }}">
+                                                            <input type="text" class="form-control" id="editPhone" name="phone" value="{{ $manager->phone_number }}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="editEmail">Email:</label>

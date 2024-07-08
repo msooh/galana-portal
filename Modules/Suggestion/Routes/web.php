@@ -20,6 +20,5 @@ Route::prefix('suggestion')->group(function() {
     Route::get('/', 'SuggestionController@index');
     Route::get('/dashboard', [SuggestionController::class, 'dashboard'])->name('suggestions.dashboard');
     Route::get('/history', [SuggestionController::class, 'history'])->name('suggestions.history');
-    Route::get('/attachments/{filename}', [SuggestionController::class, 'getAttachment'])->name('suggestions.attachment');
     Route::post('/submit', [SuggestionController::class, 'store'])->name('suggestion.store');
 });

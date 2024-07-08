@@ -26,7 +26,7 @@ class Station extends Model
 
     public function stationManager()
     {
-        return $this->belongsTo(StationManager::class, 'station_manager_id');
+        return $this->belongsTo(User::class, 'station_manager_id');
     }
 
     public function responses()
