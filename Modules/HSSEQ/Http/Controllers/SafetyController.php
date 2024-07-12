@@ -69,10 +69,13 @@ class SafetyController extends Controller
             $stations = Station::all();
         } else {
             // Station Managers and Dealers can only see their own stations
-            $stations = Station::where(function($query) use ($user) {
+            $stations = Station::where(function ($query) use ($user) {
                 if ($user->hasRole('Station Manager')) {
-                    $query->whereHas('managers', function($q) use ($user) {
-                        $q->where('users.id', $user->id);
+                    $query->whereHas('managers', function ($q) use ($user) {
+                        $q->where('users.id', $user->id)
+                          ->whereHas('roles', function ($roleQuery) {
+                              $roleQuery->where('name', 'Station Manager');
+                          });
                     });
                 }
                 if ($user->hasRole('Dealer')) {
