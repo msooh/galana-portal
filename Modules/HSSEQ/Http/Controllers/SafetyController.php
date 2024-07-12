@@ -71,7 +71,9 @@ class SafetyController extends Controller
             // Station Managers and Dealers can only see their own stations
             $stations = Station::where(function($query) use ($user) {
                 if ($user->hasRole('Station Manager')) {
-                    $query->where('station_manager_id', $user->id);
+                    $query->whereHas('managers', function($q) use ($user) {
+                        $q->where('users.id', $user->id);
+                    });
                 }
                 if ($user->hasRole('Dealer')) {
                     $query->orWhere('dealer_id', $user->id);
@@ -79,7 +81,9 @@ class SafetyController extends Controller
             })->get();
         }
     
-        $managers = StationManager::all();
+        $managers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Station Manager');
+        })->get();
         $accidents = AccidentType::all();
         return view('hsseq::hsseq.create', compact('stations','managers', 'accidents'));
     }
