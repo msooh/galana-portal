@@ -16,15 +16,17 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
 
-        // Define role data
         $roles = [
-            ['name' => 'Admin'],
-            ['name' => 'Territory Manager (TM)'],
-            ['name' => 'Retail Manager'],
-            ['name' => 'Hsseq'],
+            'Guest', 'Admin', 'Retail Manager', 'Hsseq', 'HR', 
+            'Station Manager', 'Dealer', 'Territory Manager', 'Operations Manager', 'Finance'
         ];
 
-        // Insert roles into the database
-        DB::table('roles')->insert($roles);
+        foreach ($roles as $role) {
+            DB::table('roles')->insert([
+                'name' => $role,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

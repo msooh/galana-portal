@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Setup\Entities\Dealer;
 use Modules\Setup\Entities\Station;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Hash;
 
 class DealerController extends Controller
 {
@@ -18,7 +21,15 @@ class DealerController extends Controller
      */
     public function index()
     {
-        $dealers = Dealer::all();
+        $dealers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Dealer');
+        })->get();
+    
+        // Debugging: Output the roles of each user
+        foreach ($dealers as $dealer) {
+            $roles = $dealer->roles->pluck('name');
+            logger()->info("User {$dealer->id} roles: " . $roles->implode(', '));
+        }    
 
         // Return view with dealers data
         return view('setup::dealers.index', compact('dealers'));
@@ -42,25 +53,29 @@ class DealerController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate the incoming request data
-         $validatedData = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|email|unique:dealers,email',
+            'email' => 'required|email|unique:users,email',
+            'phone_number' => 'required|string|max:20',
+            'password' => 'required|string|min:8',           
         ]);
 
-        // Create a new dealer with validated data
-        $dealer = new Dealer([
-            'name' => $validatedData['name'],
-            'company_name' => $validatedData['company_name'],
-            'phone' => $validatedData['phone'],
-            'email' => $validatedData['email'],
-            'created_by' => Auth::id(), 
-        ]);
-    
+        // Create the new user
+        $user = new User();
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->phone_number = $validatedData['phone_number'];
+        $user->password = Hash::make($validatedData['password']);
         // Save the dealer
-        $dealer->save();
+        $user->save();      
+        
+        // Assign 'Dealer' role to the user
+        $dealerRole = Role::where('name', 'Dealer')->first();
+        if ($dealerRole) {
+            $user->roles()->attach($dealerRole->id);
+        }
+    
+        
         // Redirect to the index page with success message
         return redirect()->route('dealers.index')->with('success', 'Dealer created successfully');
     
@@ -98,22 +113,21 @@ class DealerController extends Controller
     public function update(Request $request, $id)
     {
       // Find the dealer with the given ID
-      $dealer = Dealer::findOrFail($id);
+      $dealer = User::findOrFail($id);
     
       $request->validate([
-        'name' => 'required|string|max:255',
-        'phone' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255',
-    ]);
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+        ]);
    
-      // Update the dealer information based on the request data
-      $dealer->update([
-        'company_name' => $request->company_name,
-        'name' => $request->name,
-        'phone' => $request->phone,
-        'email' => $request->email,
-        'updated_by' => auth()->id(),       
-      ]);   
+        // Update the dealer information based on the request data
+        $dealer->update([       
+            'name' => $request->name,
+            'phone_number' => $request->phone,
+            'email' => $request->email,
+            'updated_by' => auth()->id(),       
+        ]);   
      
     
       // Redirect back to the dealer list or desired location
@@ -122,8 +136,8 @@ class DealerController extends Controller
 
     public function deactivate($id)
     {
-        $dealer = Dealer::findOrFail($id);
-        $dealer->active = false;
+        $dealer = User::findOrFail($id);
+        $dealer->is_active = false;
         $dealer->save();
 
         return redirect()->route('dealers.index')->with('success', 'Dealer deactivated successfully');
@@ -132,8 +146,8 @@ class DealerController extends Controller
 
     public function activate($id)
     {
-        $dealer = Dealer::findOrFail($id);
-        $dealer->active = true;
+        $dealer = User::findOrFail($id);
+        $dealer->is_active = true;
         $dealer->save();
         
         return redirect()->route('dealers.index')->with('success', 'Dealer activated successfully');
@@ -147,10 +161,10 @@ class DealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dealer $dealer)
+    public function destroy(User $user)
     {
          // Delete the dealer
-         $dealer->delete();
+         $user->delete();
 
          // Redirect to the index page with success message
          return redirect()->route('setup::dealers.index')->with('success', 'Dealer deleted successfully');

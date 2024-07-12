@@ -29,9 +29,15 @@ class SafetyController extends Controller
             $safetyReports = Safety::orderBy('created_at', 'desc')->get();
         } elseif ($user->hasRole('Station Manager')) {
             // Station Manager can only see reports for their stations, ordered by descending date
-            $safetyReports = Safety::whereHas('station', function($query) use ($user) {
-                $query->where('station_manager_id', $user->id);
+            $safetyReports = Safety::whereHas('station', function ($query) use ($user) {
+                $query->whereHas('managers', function ($subQuery) use ($user) {
+                    $subQuery->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+                             ->join('roles', 'user_roles.role_id', '=', 'roles.id')
+                             ->where('users.id', $user->id)
+                             ->where('roles.name', 'Station Manager');
+                });
             })->orderBy('created_at', 'desc')->get();
+            
         } else {
             // Default case: no safety reports
             $safetyReports = collect();
@@ -56,7 +62,23 @@ class SafetyController extends Controller
      */
     public function create()
     {
-        $stations = Station::all();
+        $user = auth()->user();
+    
+        if ($user->hasRole(['Hsseq', 'admin', 'Retail Manager'])) {
+            // These roles can see all stations
+            $stations = Station::all();
+        } else {
+            // Station Managers and Dealers can only see their own stations
+            $stations = Station::where(function($query) use ($user) {
+                if ($user->hasRole('Station Manager')) {
+                    $query->where('station_manager_id', $user->id);
+                }
+                if ($user->hasRole('Dealer')) {
+                    $query->orWhere('dealer_id', $user->id);
+                }
+            })->get();
+        }
+    
         $managers = StationManager::all();
         $accidents = AccidentType::all();
         return view('hsseq::hsseq.create', compact('stations','managers', 'accidents'));

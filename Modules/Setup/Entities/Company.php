@@ -5,19 +5,19 @@ namespace Modules\Setup\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
-class StationManager extends Model
+class Company extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'phone',
-        'email',
-        'created_by',
-        'updated_by',
+        'company_name', 'location', 'address', 'contact_person', 'email', 'phone_number', 'kra_pin', 'status', 'type', 'created_by', 'updated_by'
     ];
+
+    public function stations()
+    {
+        return $this->hasMany(Station::class);
+    }
 
     public function createdBy()
     {
@@ -28,5 +28,4 @@ class StationManager extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    
 }

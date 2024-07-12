@@ -33,7 +33,9 @@ class RetailController extends Controller
         // Calculate other values
         $surveyCount = Survey::count();
         $stationsCount = Station::count();
-        $dealersCount = Dealer::count();
+        $dealersCount =  User::whereHas('roles', function($query) {
+            $query->where('name', 'Dealer');
+        })->count();
 
         // Calculate visits and visit rate
         $expectedVisits = 2 * $stationsCount; // Assuming 2 visits per station per month
@@ -45,7 +47,9 @@ class RetailController extends Controller
         $newStations = Station::whereMonth('created_at', '=', $currentMonth)->count();
         $newStationsPercentage = $stationsCount > 0 ? ($newStations / $stationsCount) * 100 : 0;
 
-        $dealers = Dealer::whereMonth('created_at', '=', $currentMonth)->count();
+        $dealers = User::whereHas('roles', function($query) {
+            $query->where('name', 'Dealer');
+        })->whereMonth('created_at', '=', $currentMonth)->count();
         $dealersPercentage = $dealersCount > 0 ? ($dealers / $dealersCount) * 100 : 0;
 
         $newUsers = User::whereMonth('created_at', '=', $currentMonth)->count();

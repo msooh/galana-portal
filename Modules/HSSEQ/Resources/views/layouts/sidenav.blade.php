@@ -37,6 +37,7 @@
             </ul>
         </li>
         @endcan
+        @can('manage_tasks')
         <li class="nav-title">Tasks</li>
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
@@ -48,7 +49,8 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('safeties.pending') }}"> Pending</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('safeties.closedTasks') }}"> Completed</a></li>
             </ul>
-        </li>     
+        </li> 
+        @endcan    
         <li class="nav-divider"></li>  
         
     </ul>
