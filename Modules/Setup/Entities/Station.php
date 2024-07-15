@@ -36,10 +36,7 @@ class Station extends Model
      */
     public function managers()
     {
-        return $this->belongsToMany(User::class, 'user_stations', 'station_id', 'user_id')
-        ->join('user_roles', 'user_stations.user_id', '=', 'user_roles.user_id')
-        ->join('roles', 'user_roles.role_id', '=', 'roles.id')
-        ->where('roles.name', 'Station Manager');
+        return $this->belongsToMany(User::class, 'user_stations', 'station_id', 'user_id');
     }
 
     /**

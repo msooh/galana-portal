@@ -71,14 +71,12 @@ class User extends Authenticatable
      * Get the stations managed by the user.
      */
     public function managedStations()
-    {
-        return $this->belongsToMany(Station::class, 'user_stations', 'user_id', 'station_id')
-                    ->wherePivotIn('user_id', function ($query) {
-                        $query->select('user_id')
-                            ->from('user_roles')
-                            ->where('role_id', Role::where('name', 'Station Manager')->first()->id);
-                    });
-    }
+{
+    return $this->belongsToMany(Station::class, 'user_stations', 'user_id', 'station_id')
+                ->join('user_roles', 'user_stations.user_id', '=', 'user_roles.user_id')
+                ->join('roles', 'user_roles.role_id', '=', 'roles.id')
+                ->where('roles.name', 'Station Manager');
+}
 
 
     /**
