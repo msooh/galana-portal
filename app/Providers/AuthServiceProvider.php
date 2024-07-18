@@ -47,7 +47,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('manage_safeties', function ($user) {
-            return $user->hasRole('Admin') || $user->hasRole('Hsseq') || $user->hasRole('Station Manager');
+            return $user->hasRole('Admin') || $user->hasRole('Hsseq') || $user->hasRole('Station Manager') || $user->hasRole('Retail Manager');
         });
 
         Gate::define('manage_tasks', function ($user) {

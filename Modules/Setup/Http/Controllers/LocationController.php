@@ -40,10 +40,14 @@ class LocationController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location_details' => 'required|string',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         Location::create([
             'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'location_details' => $request->location_details,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id(),
@@ -84,10 +88,14 @@ class LocationController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location_details' => 'required|string',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $location->update([
             'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'location_details' => $request->location_details,
             'updated_by' => auth()->id(),
         ]);

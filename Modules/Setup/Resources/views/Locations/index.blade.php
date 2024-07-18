@@ -20,6 +20,8 @@
                             <thead class="table-dark">
                             <tr>
                                 <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Location Details</th>
                                 <th>Actions</th>
                             </tr>
@@ -28,6 +30,8 @@
                             @foreach ($locations as $location)
                                 <tr>
                                     <td>{{ $location->name }}</td>
+                                    <td>{{ $location->email }}</td>
+                                    <td>{{ $location->phone }}</td>
                                     <td>{{ $location->location_details }}</td>
                                     <td>
                                         <div class="btn-group">
@@ -64,6 +68,14 @@
                                                         <label for="location_details{{ $location->id }}" class="form-label">Location Details</label>
                                                         <textarea class="form-control" id="location_details{{ $location->id }}" name="location_details" required>{{ $location->location_details }}</textarea>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label for="name{{ $location->id }}" class="form-label">Email</label>
+                                                        <input type="text" class="form-control" id="email{{ $location->id }}" name="email" value="{{ $location->email }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="name{{ $location->id }}" class="form-label">Name</label>
+                                                        <input type="text" class="form-control" id="phone{{ $location->id }}" name="phone" value="{{ $location->phone }}" required>
+                                                    </div>
                                                     <button type="submit" class="btn btn-primary">Update Location</button>
                                                 </form>
                                             </div>
@@ -99,6 +111,26 @@
                         <label for="location_details" class="form-label">Location Details</label>
                         <textarea class="form-control" id="location_details" name="location_details" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $location->email ?? '') }}">
+                        @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $location->phone ?? '') }}">
+                        @error('phone')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary">Add Location</button>
                 </form>
             </div>

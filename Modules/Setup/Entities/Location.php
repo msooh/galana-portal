@@ -12,6 +12,8 @@ class Location extends Model
     protected $fillable = [
         'name',
         'location_details',
+        'email',
+        'phone',
         'created_by',
         'updated_by',
     ];

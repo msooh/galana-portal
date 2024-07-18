@@ -18,7 +18,7 @@
                                         <th>Rating</th>
                                         <th>Type</th>
                                         <th>Nature</th>
-                                        <th>Station</th>
+                                        <th>Location</th>
                                         <th>Date</th>
                                         <th>Time</th>                         
                                         <th>Police Report</th>
@@ -46,7 +46,15 @@
                                             </td>
                                             <td>{{ $report->type }}</td>
                                             <td>{{ $report->accidentType->name }}</td>
-                                            <td>{{ $report->station->name }}</td>
+                                            <td>
+                                                @if ($report->station_id)
+                                                    {{ $report->station->name }}
+                                                @elseif ($report->other_location_id)
+                                                    {{ $report->location->name }}
+                                                @else
+                                                    Unknown
+                                                @endif
+                                            </td>                                            
                                             <td>{{ $report->date }}</td>
                                             <td>{{ $report->time }}</td>
                                             <td>{{ $report->police_report }}</td>
@@ -139,7 +147,13 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Station:</th>
-                                                                        <td>{{ $report->station->name }}</td>
+                                                                        <td>@if ($report->station_id)
+                                                                            {{ $report->station->name }}
+                                                                        @elseif ($report->other_location_id)
+                                                                            {{ $report->location->name }}
+                                                                        @else
+                                                                            Unknown
+                                                                        @endif</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Date:</th>
@@ -249,6 +263,52 @@
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
 <!-- Include DataTables JS -->
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        @endif
+
+        @if($errors->any())
+        // Retain old input values and highlight the inputs with errors
+        var errors = {!! json_encode($errors->toArray()) !!};
+        var oldInput = {!! json_encode(old()) !!};
+
+        $.each(errors, function(field, message) {
+            // Highlight the field with error
+            var $input = $('[name="' + field + '"]');
+            $input.addClass('is-invalid');
+
+            // Retain old input value
+            if (oldInput[field] !== undefined) {
+                if ($input.is('select[multiple]')) {
+                    var oldValues = oldInput[field];
+                    $input.val(Array.isArray(oldValues) ? oldValues : [oldValues]);
+                } else {
+                    $input.val(oldInput[field]);
+                }
+            }
+        });
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: '<p>' + '{!! implode('<br>', $errors->all()) !!}' + '</p>',
+            confirmButtonText: 'OK'
+        });
+        @endif
+    });
+</script>
 
 <script>
     new DataTable('#hsseq-history');

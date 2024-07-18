@@ -10,7 +10,7 @@
                 <div class="card-body">                   
 
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="closed">
                             <thead class="table-dark">
                                 <tr>
                                     <th>Type</th>
@@ -145,4 +145,15 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Include Bootstrap 5 JS -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<!-- Include DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script>
+    new DataTable('#closed');
+</script>
 @endsection

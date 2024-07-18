@@ -6,6 +6,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
 use Modules\Setup\Entities\Station;
+use Modules\Setup\Entities\Location;
 use Modules\Setup\Entities\StationManager;
 use Modules\HSSEQ\Entities\Safety;
 use Modules\Setup\Entities\Department;
@@ -24,8 +25,10 @@ class SafetyController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->hasRole('Admin')) {
-            // Admin can see all safety reports, ordered by descending date
+        $roles = $user->roles()->pluck('name')->toArray();        
+    
+        if ($user->hasRole('Admin') || $user->hasRole('Hsseq') || $user->hasRole('Retail Manager')) {
+            // Hsseq, Admin, and Retail Manager can see all safety reports, ordered by descending date
             $safetyReports = Safety::orderBy('created_at', 'desc')->get();
         } elseif ($user->hasRole('Station Manager')) {
             // Station Manager can only see reports for their stations, ordered by descending date
@@ -37,23 +40,21 @@ class SafetyController extends Controller
                              ->where('roles.name', 'Station Manager');
                 });
             })->orderBy('created_at', 'desc')->get();
-            
         } else {
             // Default case: no safety reports
             $safetyReports = collect();
         }
-        
+    
         $departments = Department::all();
-        
+    
         $usersByDepartment = User::whereHas('departments', function($query) use ($departments) {
             $query->whereIn('department_id', $departments->pluck('id'));
         })->get()->groupBy('departments.0.id')->toArray();
-
-       
-
+    
         return view('hsseq::hsseq.index', compact('safetyReports', 'departments', 'usersByDepartment'));
-
     }
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -63,8 +64,9 @@ class SafetyController extends Controller
     public function create()
     {
         $user = auth()->user();
+        $locations = Location::all();
     
-        if ($user->hasRole(['Hsseq', 'admin', 'Retail Manager'])) {
+        if ($user->hasRole(['Hsseq', 'Admin', 'Retail Manager'])) {
             // These roles can see all stations
             $stations = Station::all();
         } else {
@@ -88,8 +90,7 @@ class SafetyController extends Controller
                         $q->where('users.id', $user->id);
                     });
                 }
-            })->get();
-                    
+            })->get();                    
             
         }
     
@@ -97,7 +98,7 @@ class SafetyController extends Controller
             $query->where('name', 'Station Manager');
         })->get();
         $accidents = AccidentType::all();
-        return view('hsseq::hsseq.create', compact('stations','managers', 'accidents'));
+        return view('hsseq::hsseq.create', compact('stations','managers', 'accidents', 'locations'));
     }
 
     /**
@@ -111,7 +112,8 @@ class SafetyController extends Controller
         //dd($request->all(), $request->file('police_file'));
         $request->validate([
             'type' => 'required|in:Accident,Incident',
-            'station_id' => 'required|exists:stations,id',
+            'station_id' => 'nullable|exists:stations,id',
+            'location_id' => 'nullable|exists:locations,id',
             'date' => 'required|date',
             'time' => 'required',
             'comment' => 'required',
@@ -128,8 +130,9 @@ class SafetyController extends Controller
     
         // Create a new Safety instance
         $safety = new Safety([
-            'type' => $request->type,
+            'type' => $request->type,        
             'station_id' => $request->station_id,
+            'other_location_id' => $request->location_id,
             'date' => $request->date,
             'time' => $request->time,
             'comment' => $request->comment,
@@ -149,15 +152,14 @@ class SafetyController extends Controller
             $policeFile = $request->file('police_file');
             $fileName = time() . '_' . $policeFile->getClientOriginalName();
             $filePath = $policeFile->storeAs('police_files', $fileName, 'public');
-            $safety->police_file = $filePath;   
-                      
+            $safety->police_file = $filePath;         
         }
     
         // Save the safety report
         $safety->save();   
-       
     
-        return redirect()->back()->with('success', 'Safety report created successfully.');
+        return redirect()->route('hsseq.index')
+        ->with('success', 'Safety report created successfully.');
     }
 
 
@@ -167,7 +169,6 @@ class SafetyController extends Controller
             'department_id' => 'required|exists:departments,id',
             'user_id' => 'required|exists:users,id',
         ]);
-    
         
         $report->assigned_to = $request->user_id;
         $report->assigned_at = now();

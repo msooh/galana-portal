@@ -8,7 +8,64 @@
                 <div class="card-header"> <b>New Accident/Incident Report</b></div>
                 <div class="card-body">
                     <form class="row g-3" method="POST" enctype="multipart/form-data" action="{{ route('hsseq.store') }}">
-                        @csrf
+                        @csrf                       
+
+                        @php
+                        $user = auth()->user();
+                        $showLocationType = $user->hasRole('Admin') || $user->hasRole('Hsseq') || $user->hasRole('Retail Manager');
+                        $showStationSelect = $user->hasRole('Station Manager');
+                        $showLocationSelect = $user->hasRole('Depot');
+                        @endphp
+
+                        @if ($showLocationType)
+                        <div class="row mb-3 mt-3">
+                            <div class="col-md-12">
+                                <label><b>Select Location Type</b></label>
+                                <div>
+                                    <input type="radio" id="stationOption" name="location_type" value="station" checked>
+                                    <label for="stationOption">Station</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="locationOption" name="location_type" value="location">
+                                    <label for="locationOption">Other Location</label>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                       
+                        @if ($showStationSelect || $showLocationType)
+                        <div class="col-md-6" id="stationSelect">
+                            <label for="station_id" class="form-label"><b>Select Station</b></label>
+                            <select id="station_id" class="form-select @error('station_id') is-invalid @enderror" name="station_id">
+                                <option value="">Select Station</option>
+                                @foreach($stations as $station)
+                                <option value="{{ $station->id }}" {{ old('station_id') == $station->id ? 'selected' : '' }}>{{ $station->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('station_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        @endif
+
+                        @if ($showLocationSelect || $showLocationType)
+                        <div class="col-md-6 {{ $showLocationType ? 'd-none' : '' }}" id="locationSelect">
+                            <label for="location_id" class="form-label"><b>Select Other Location</b></label>
+                            <select id="location_id" class="form-select @error('location_id') is-invalid @enderror" name="location_id">
+                                <option value="">Select Other Location</option>
+                                @foreach($locations as $location)
+                                <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>{{ $location->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('location_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        @endif
                         <div class="col-md-6">
                             <label for="type" class="form-label"><b>Type</b><span class="text-danger">*</span></label>
                             <select id="type" class="form-select @error('type') is-invalid @enderror" name="type" required>
@@ -22,21 +79,8 @@
                             </div>
                             @enderror
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="station_id" class="form-label"><b>Select Station</b><span class="text-danger">*</span></label>
-                            <select id="station_id" class="form-select @error('station_id') is-invalid @enderror" name="station_id" required>
-                                <option value="">Select Station</option>
-                                @foreach($stations as $station)
-                                <option value="{{ $station->id }}" {{ old('station_id') == $station->id ? 'selected' : '' }}>{{ $station->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('station_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
+                   
+                        
 
                         <div class="col-md-6">
                             <label for="date" class="form-label"><b>Date</b><span class="text-danger">*</span></label>
@@ -222,4 +266,26 @@
         @endif
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stationOption = document.getElementById('stationOption');
+        const locationOption = document.getElementById('locationOption');
+        const stationSelect = document.getElementById('stationSelect');
+        const locationSelect = document.getElementById('locationSelect');
+    
+        stationOption.addEventListener('change', function() {
+            if (stationOption.checked) {
+                stationSelect.classList.remove('d-none');
+                locationSelect.classList.add('d-none');
+            }
+        });
+    
+        locationOption.addEventListener('change', function() {
+            if (locationOption.checked) {
+                locationSelect.classList.remove('d-none');
+                stationSelect.classList.add('d-none');
+            }
+        });
+    });
+    </script>
 @endsection

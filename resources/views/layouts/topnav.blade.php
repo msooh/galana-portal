@@ -34,12 +34,16 @@
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar avatar-md">
                         <img class="avatar-img" src="{{ asset('assets/img/avatars/default.jpg') }}" alt="user@email.com">
-                    </div>
+                    </div>                    
                 </a>
+               
                 <div class="dropdown-menu dropdown-menu-end pt-0">
+                    <div class="text-center">
+                        <strong>Howdy {{ explode(' ', auth()->user()->name)[0] }}?</strong>
+                    </div>
                     <div class="dropdown-header bg-light py-2">
                         <div class="fw-semibold">Account</div>
-                    </div>
+                    </div>                    
                     <!--<a class="dropdown-item" href="#">
                         <svg class="icon me-2">
                             <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-bell') }}"></use>
@@ -88,6 +92,7 @@
                 </div>
             </li>
         </ul>
+       
     </div>
     <div class="header-divider"></div>
     <div class="container-fluid">
