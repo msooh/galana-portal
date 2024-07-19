@@ -6,35 +6,38 @@
     <div class="row">
         <!-- Total Safety Reports Card -->
         <div class="col-sm-6 col-lg-3">
-            <div class="card mb-4">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="fs-4 fw-semibold">{{ $totalReports }} <span class="fs-6 fw-normal">{{ number_format($totalReports / $totalReports * 100, 2) }}%
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
-                            </svg>
-                        </span></div>
-                        <div>Total Safety Reports</div>
+            <a href="{{ route('hsseq.index') }}" class="card-link">
+                <div class="card mb-4">
+                    <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="fs-4 fw-semibold">{{ $totalReports }} <span class="fs-6 fw-normal">{{ number_format($totalReports / $totalReports * 100, 2) }}%
+                                <svg class="icon">
+                                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
+                                </svg>
+                            </span></div>
+                            <div>Total Safety Reports</div>
+                        </div>
+                        <!-- Dropdown button -->
+                        <div class="dropdown">
+                            <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                        </div>
                     </div>
-                    <!-- Dropdown button -->
-                    <div class="dropdown">
-                        <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                    <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                        
                     </div>
                 </div>
-                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                    <canvas class="chart" id="card-chart1" height="70"></canvas>
-                </div>
-            </div>
+            </a>
         </div>
         <!-- /.col-->
 
         <!-- Un-Assigned or Pending Tasks Card -->
         <div class="col-sm-6 col-lg-3">
+            <a href="{{ route('hsseq.index') }}" class="card-link">
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
@@ -59,11 +62,13 @@
                     <canvas class="chart" id="card-chart3" height="70"></canvas>
                 </div>
             </div>
+            </a>
         </div>
         <!-- /.col-->
 
         <!-- Completed Tasks Card -->
         <div class="col-sm-6 col-lg-3">
+            <a href="{{ route('safeties.closedTasks') }}" class="card-link">
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
@@ -88,11 +93,13 @@
                     <canvas class="chart" id="card-chart2" height="70"></canvas>
                 </div>
             </div>
+            </a>
         </div>
         <!-- /.col-->
 
         <!-- In Progress Reports Card -->
         <div class="col-sm-6 col-lg-3">
+            <a href="{{ route('safeties.pending') }}" class="card-link">
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
@@ -117,6 +124,7 @@
                     <canvas class="chart" id="card-chart4" height="70"></canvas>
                 </div>
             </div>
+            </a>
         </div>
         <!-- /.col-->
     </div>

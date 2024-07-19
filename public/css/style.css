@@ -14193,3 +14193,18 @@ html:not([dir=rtl]) .wrapper {
   .counter{ margin-bottom: 40px; }
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link .card {
+  cursor: pointer;
+}
+
+.card-link:hover .card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
