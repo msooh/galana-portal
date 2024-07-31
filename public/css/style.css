@@ -14117,16 +14117,18 @@ html:not([dir=rtl]) .wrapper {
 
 
 /*# sourceMappingURL=style.css.map */
-
+a{
+  text-decoration: none !important;
+}
 .counter{
-  color: #ee1a26;
+  color: #707070;
   font-family: 'Open Sans', sans-serif;
   text-align: center;
   height: 190px;
   width: 190px;
   padding: 30px 25px 25px;
   margin: 0 auto;
-  border: 3px solid #ee1a26;
+  /*border: 3px solid #707070;*/
   border-radius: 20px 20px;
   position: relative;
   z-index: 1;
@@ -14148,7 +14150,7 @@ html:not([dir=rtl]) .wrapper {
   background: transparent;
   width: 100px;
   height: 100px;
-  border: 15px solid #ee1a26;
+  /*border: 15px solid #707070;*/
   border-top: none;
   border-right: none;
   border-radius: 0 0 0 20px;
@@ -14157,6 +14159,7 @@ html:not([dir=rtl]) .wrapper {
   left: -10px;
   bottom: -10px;
   right: auto;
+  text-decoration: none;
 }
 .counter .counter-icon{
   font-size: 35px;
@@ -14183,7 +14186,7 @@ html:not([dir=rtl]) .wrapper {
 }
 .counter.blue{
   color: #343b96;
-  border-color: #343b96;
+  /*border-color: #343b96;*/
 }
 .counter.blue:after{
   border-bottom-color: #343b96;

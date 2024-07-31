@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Setup\Entities\Station;
 use Laravel\Sanctum\HasApiTokens;
 
+
 use Modules\Setup\Entities\Department;
 
 class User extends Authenticatable
@@ -57,6 +58,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     } 
 
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
+    }
+
     public function departments()
     {
         return $this->belongsToMany(Department::class, 'department_user');
@@ -71,12 +79,12 @@ class User extends Authenticatable
      * Get the stations managed by the user.
      */
     public function managedStations()
-{
-    return $this->belongsToMany(Station::class, 'user_stations', 'user_id', 'station_id')
-                ->join('user_roles', 'user_stations.user_id', '=', 'user_roles.user_id')
-                ->join('roles', 'user_roles.role_id', '=', 'roles.id')
-                ->where('roles.name', 'Station Manager');
-}
+    {
+        return $this->belongsToMany(Station::class, 'user_stations', 'user_id', 'station_id')
+                    ->join('user_roles', 'user_stations.user_id', '=', 'user_roles.user_id')
+                    ->join('roles', 'user_roles.role_id', '=', 'roles.id')
+                    ->where('roles.name', 'Station Manager');
+    }
 
 
     /**

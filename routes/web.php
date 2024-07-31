@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StationManagerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
 
 
 /*
@@ -42,7 +43,9 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {    
     Route::resource('users', UserController::class)->middleware('can:manage_users');
     Route::put('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
-    Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');    
+    Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate'); 
+    Route::resource('permissions', PermissionController::class)->middleware('can:manage_users');   
+    Route::post('/permissions/assign', [PermissionController::class, 'assign'])->name('permissions.assign');
 
 });
 

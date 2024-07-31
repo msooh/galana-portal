@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form id="regForm" action="{{ route('surveys.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('POST')
+                        @method('POST')                            
                         <div class="form-group">
                             <label for="station_id">Select Station:</label>
                             <select class="form-select" id="station_id" name="station_id" required>

@@ -29,12 +29,20 @@
             <ul class="nav-group-items">
                 <li class="nav-item"><a class="nav-link" href="{{ route('users.create') }}" target="_top">
                     <svg class="nav-icon">
-                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}"></use>
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user-plus') }}"></use>
                     </svg> Add User</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}" target="_top">
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}"></use>
                     </svg> List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('permissions.create') }}" target="_top">
+                    <svg class="nav-icon">
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg>Permissions</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('permissions.index') }}" target="_top">
+                    <svg class="nav-icon">
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg>List Permissions</a></li>
                 <li class="nav-item"><a class="nav-link" href="404.html" target="_top">
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-bug') }}"></use>

@@ -18,7 +18,7 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Location::all();
-        return view('setup::locations.index', compact('locations'));
+        return view('setup::Locations.index', compact('locations'));
     }
 
     /**
@@ -27,7 +27,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return view('setup::locations.create');
+        return view('setup::Locations.create');
     }
 
     /**

@@ -5,11 +5,11 @@
     <div class="row">
         <div class="container">
             <div class="row pt-5">
-                <!-- Retail Module Card -->
+                <!-- Retail Module Card -->               
                 @can('view_retail')
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-2 col-sm-3">
                     <a href="{{ route('retail.index') }}" class="counter-link">
-                        <div class="counter">
+                        <div class="counter blue">
                             <div class="counter-icon">
                                 <i class="fa fa-store"></i>
                             </div>                       
@@ -18,9 +18,35 @@
                     </a>
                 </div>
                 @endcan
+                <!-- Feedback Module Card -->
+                @can('manage_suggestions')
+                <div class="col-md-2 col-sm-6">
+                    <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
+                        <div class="counter blue">
+                            <div class="counter-icon">
+                                <i class="fa fa-file-invoice-dollar"></i>                                
+                            </div>                       
+                            <h3>Finance Module</h3>
+                        </div>
+                    </a>
+                </div>
+                @endcan
+                <!-- Maintenance Module Card -->
+                @can('manage_suggestions')
+                <div class="col-md-2 col-sm-6">
+                    <a href="#" class="counter-link">
+                        <div class="counter blue">
+                            <div class="counter-icon">
+                                <i class="fas fa-wrench"></i>                              
+                            </div>                       
+                            <h3>Maintenance Module</h3>
+                        </div>
+                    </a>
+                </div>
+                @endcan
                 <!-- HSSEQ Module Card -->
                 @can('manage_safeties')
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-2 col-sm-6">
                     <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -33,9 +59,9 @@
                 @endcan
                  <!-- Customer Feedback Module Card -->
                  @can('manage_feedback')
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-2 col-sm-6">
                     <a href="{{ route('feedback.dashboard') }}" class="counter-link">
-                        <div class="counter">
+                        <div class="counter blue">
                             <div class="counter-icon">
                                 <i class="fa fa-comments"></i>
                             </div>                       
@@ -46,7 +72,7 @@
                 @endcan
                 <!-- Feedback Module Card -->
                 @can('manage_suggestions')
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-2 col-sm-6">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -56,7 +82,7 @@
                         </div>
                     </a>
                 </div>
-                @endcan
+                @endcan               
             </div>
         </div>       
     </div>

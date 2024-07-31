@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+use Stevebauman\Location\Facades\Location;
 use Modules\Retail\Entities\Survey;
 use Modules\Retail\Entities\Subcategory;
 use Modules\Retail\Entities\Category;
@@ -13,7 +14,7 @@ use Modules\Retail\Entities\Response;
 use Modules\Retail\Entities\Checklist;
 use Modules\Setup\Entities\Station;
 use Modules\Retail\Entities\Signature;
-
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class SurveyController extends Controller
@@ -62,13 +63,27 @@ class SurveyController extends Controller
                 'signature_image' => 'required',// 2MB max for signature images
                 'comment' => 'nullable|string|max:1000',
             ]);
+           
+            $ip = $request->ip();
+            $location = Location::get($ip);
+            
+            // Debugging information using dd()
+            //dd("IP Address: $ip", "Location Data: ", $location);
+
+            $location = Location::get($request->ip());
     
             // Create a new Survey
             $survey = new Survey();
             $survey->date = now()->toDateString(); // Save current date
             $survey->time = now()->toTimeString(); // Save current time
             $survey->station_id = $validatedData['station_id'];
+          
             $survey->created_by = auth()->user()->id;
+
+            if ($location) {
+                $survey->latitude = $location->latitude;
+                $survey->longitude = $location->longitude;
+            }
             $survey->save();
     
             $surveyId = $survey->id;
