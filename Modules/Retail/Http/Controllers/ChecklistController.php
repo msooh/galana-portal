@@ -41,7 +41,7 @@ class ChecklistController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:1000',
+            'name' => 'required|string',
             'subcategory_id' => 'required|exists:subcategories,id',
         ]);
 
