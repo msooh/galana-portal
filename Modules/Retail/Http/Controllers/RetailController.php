@@ -6,6 +6,7 @@ use Modules\Retail\Entities\Survey;
 use App\Models\User;
 use App\Models\Role;
 use Modules\Setup\Entities\Station;
+use Modules\Retail\Entities\Category;
 use Modules\Setup\Entities\Dealer;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -85,10 +86,10 @@ class RetailController extends Controller
         for ($month = 1; $month <= 12; $month++) {
             $surveyCounts[date('F', mktime(0, 0, 0, $month, 1))] = Survey::whereMonth('created_at', $month)->count();
         }
-
+        $categories = Category::all();
         $dashboardData = $this->calculateDashboardData();
 
-        return view('retail::dashboard', compact('dashboardData', 'surveyCounts'));
+        return view('retail::dashboard', compact('dashboardData', 'surveyCounts', 'categories'));
     }
 
     /**

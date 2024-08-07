@@ -14,6 +14,7 @@ use Modules\Retail\Entities\Response;
 use Modules\Retail\Entities\Checklist;
 use Modules\Setup\Entities\Station;
 use Modules\Retail\Entities\Signature;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,13 +38,28 @@ class SurveyController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    
+    public function create($categoryId)
     {
-        $categoryId = 1;
+        $categories = Category::all();
+        $category = Category::findOrFail($categoryId);
         $category = Category::with('subcategories.checklists')->findOrFail($categoryId);
-        $stations = Station::all();
+
+        $user = Auth::user();
+        
+        if ($user->hasRole('Admin') || $user->hasRole('Retail Manager')) {
+            // Show all stations for admin and retail manager
+            $stations = Station::all();
+        } elseif ($user->hasRole('Territory Manager (TM)')) {
+            // Show only stations associated with the current user for territory manager
+            $stations = $user->stations; 
+        } else {
+            // Handle other roles or show an empty list
+            $stations = collect(); // Empty collection for other roles
+        }
+       
       
-        return view('retail::surveys.checklist', compact('category', 'stations'));
+        return view('retail::surveys.checklist', compact('category', 'categories', 'stations'));
     }
 
     /**
@@ -62,6 +78,7 @@ class SurveyController extends Controller
                 'role' => 'required|string|in:Dealer,Station Manager',                
                 'signature_image' => 'required',// 2MB max for signature images
                 'comment' => 'nullable|string|max:1000',
+                'weight' => 'nullable|numeric',
             ]);
            
             $ip = $request->ip();
@@ -180,7 +197,7 @@ class SurveyController extends Controller
      */
     public function show($id)
     {
-        return view('retail::show');
+       // return view('retail::show');
     }
 
     /**
@@ -190,7 +207,7 @@ class SurveyController extends Controller
      */
     public function edit($id)
     {
-        return view('retail::edit');
+        //return view('retail::edit');
     }
 
     /**

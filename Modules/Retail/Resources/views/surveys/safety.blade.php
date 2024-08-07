@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form id="regForm" action="{{ route('surveys.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('POST')
+                        @method('POST')                            
                         <div class="form-group">
                             <label for="station_id">Select Station:</label>
                             <select class="form-select" id="station_id" name="station_id" required>
@@ -20,8 +20,7 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        <div id="formSteps">
+                        <div id="formSteps">                           
                             @foreach($category->subcategories as $index => $subcategory)
                             <div class="form-step{{ $index === 0 ? ' active' : '' }}" id="step-{{ $index }}">
                                 <h3>{{ $subcategory->name }}</h3>
@@ -34,22 +33,13 @@
                                                 <th>Yes</th>
                                                 <th>No</th>
                                                 <th>N/A</th>
-                                                @if(in_array($category->type, ['attachment', 'weight', 'comment']))
-                                                    <th>@if($category->type === 'weight')
-                                                         Weight 
-                                                        @elseif($category->type === 'attachment') 
-                                                        Attachment 
-                                                        @else 
-                                                        Comment 
-                                                        @endif
-                                                    </th>
-                                                @endif
+                                                <th>Attachment</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if($subcategory->checklists->isEmpty())
                                             <tr>
-                                                <td colspan="{{ 5 + (in_array($category->type, ['attachment', 'weight', 'comment']) ? 1 : 0) }}" class="text-center">No checklist items in this category.</td>
+                                                <td colspan="6" class="text-center">No checklist items in this category.</td>
                                             </tr>
                                             @endif
                                             @foreach($subcategory->checklists as $item)
@@ -58,35 +48,25 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="Yes" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}]" value="Yes" required>
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="No" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}]" value="No" required>
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="N/A" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}]" value="N/A" required>
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
-                                                @if($category->type === 'attachment')
                                                 <td>
-                                                    <input type="file" name="responses[{{ $item->id }}][file]" accept="image/*">
+                                                    <input type="file" name="attachments[{{ $item->id }}]" accept="image/*">
                                                 </td>
-                                                @elseif($category->type === 'weight')
-                                                <td>
-                                                    <input type="number" name="responses[{{ $item->id }}][weight]" step="0.01">
-                                                </td>
-                                                @elseif($category->type === 'comment')
-                                                <td>
-                                                    <textarea class="form-control" name="responses[{{ $item->id }}][comment]"></textarea>
-                                                </td>
-                                                @endif
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -95,10 +75,18 @@
                             </div>
                             @endforeach
 
-                            <!-- Signature Pad -->
+                            <!-- Additional Step for Comment -->
+                            <div class="form-step" id="step-comment" style="display: none;">
+                                <h3>Add Comment</h3>
+                                <div class="form-group mb-5">
+                                    <label for="comment">Comment</label>
+                                    <textarea class="form-control" id="comment" name="comment"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Signature Pad -->                          
                             <div class="form-step" id="step-signature" style="display: none;">
-                                <h3>Station Signature</h3>
-                                <p>This section is to be filled by either the Dealer or Station Manager</p>
+                                <h3>Dealer Signature</h3>
                                 <div>
                                     <canvas id="signatureCanvas" width="400" height="200" style="border: 1px solid black;"></canvas>
                                     <!-- Hidden input for signature image -->
@@ -111,10 +99,9 @@
                                         <option value="Dealer">Dealer</option>
                                         <option value="Station Manager">Station Manager</option>
                                     </select>
-                                </div>
+                                </div>                               
                             </div>
                         </div>
-
                         <div style="overflow:auto;">
                             <div style="float:right;">
                                 <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -122,12 +109,12 @@
                                 <button type="submit" class="btn btn-primary" id="submitButton" style="display: none;">Submit</button>
                             </div>
                         </div>
-
                         <!-- Circles which indicate the steps of the form -->
                         <div style="text-align:center;margin-top:40px;">
                             @foreach($category->subcategories as $index => $subcategory)
                                 <span class="step{{ $index === 0 ? ' active' : '' }}"></span>
                             @endforeach
+                            <span class="step"></span> <!-- Comment Step -->
                             <span class="step"></span> <!-- Signature Step -->
                         </div>
                     </form>
@@ -147,7 +134,7 @@
     var progressSteps = document.getElementsByClassName("step");
     var nextButton = document.getElementById("nextBtn");
     var prevButton = document.getElementById("prevBtn");
-    var submitButton = document.getElementById("submitButton");
+    var submitButton = document.getElementById("submitButton"); // New: Grabbing the submit button
 
     showStep(currentStep); // Show the first step
 
@@ -172,6 +159,7 @@
         showStep(currentStep);
 
         if (currentStep === formSteps.length - 1) {
+            // If on the signature step, hide next button and show submit button
             nextButton.style.display = "none";
             submitButton.style.display = "inline";
         } else {

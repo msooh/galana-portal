@@ -21,9 +21,11 @@ use Modules\Retail\Http\Controllers\SubcategoryController;
 
 Route::prefix('retail')->group(function() {
     Route::get('/', [RetailController::class, 'index'])->name('retail.index');    
-    Route::resource('surveys', SurveyController::class);
+    Route::get('/surveys/create/{category}', [SurveyController::class, 'create'])->name('surveys.create');
+    Route::resource('surveys', SurveyController::class)->except(['create']); 
     Route::resource('checklists', ChecklistController::class)->middleware('can:manage_checklists');
     Route::resource('categories', CategoryController::class);
     Route::resource('subcategories', SubcategoryController::class);
     Route::post('/surveys/{survey}/approve', [SurveyController::class, 'approve'])->name('surveys.approve');
+    
 });

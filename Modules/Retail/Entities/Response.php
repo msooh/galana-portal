@@ -9,7 +9,8 @@ class Response extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['checklist_item_id', 'survey_id', 'response', 'file_path'];
+    protected $fillable = ['checklist_item_id', 'survey_id', 'response', 'comment',
+    'weight', 'file_path'];
 
     public function checklistItem()
     {

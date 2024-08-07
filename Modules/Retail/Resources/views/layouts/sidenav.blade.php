@@ -29,7 +29,13 @@
                 </svg> Surveys
             </a>
             <ul class="nav-group-items">
-                <li class="nav-item"><a class="nav-link" href="{{ route('surveys.create') }}"> Quality Checklist </a></li>
+                @foreach($categories as $category)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('surveys.create', ['category' => $category->id]) }}">
+                            {{ $category->name }}
+                        </a>
+                    </li>
+                @endforeach
                 <li class="nav-item"><a class="nav-link" href="{{ route('surveys.index') }}"> History</a></li>
             </ul>
         </li>
