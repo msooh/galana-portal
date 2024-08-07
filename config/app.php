@@ -183,6 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,    
         Modules\Retail\Providers\RetailServiceProvider::class, 
         Stevebauman\Location\LocationServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
 
         /*
          * Package Service Providers...
