@@ -18,14 +18,20 @@ use Modules\Retail\Http\Controllers\SubcategoryController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('retail')->group(function() {
-    Route::get('/', [RetailController::class, 'index'])->name('retail.index');    
-    Route::get('/surveys/create/{category}', [SurveyController::class, 'create'])->name('surveys.create');
-    Route::resource('surveys', SurveyController::class)->except(['create']); 
-    Route::resource('checklists', ChecklistController::class)->middleware('can:manage_checklists');
-    Route::resource('categories', CategoryController::class);
-    Route::resource('subcategories', SubcategoryController::class);
-    Route::post('/surveys/{survey}/approve', [SurveyController::class, 'approve'])->name('surveys.approve');
-    
+Route::middleware(['auth'])->group(function () {
+    Route::middleware('permission:Retail Module')->group(function() {
+        Route::prefix('retail')->group(function() {
+            Route::get('/', [RetailController::class, 'index'])->name('retail.index');    
+            Route::get('/surveys/create/{category}', [SurveyController::class, 'create'])->name('surveys.create');
+            Route::resource('surveys', SurveyController::class)->except(['create']); 
+            Route::middleware('permission:Manage Checklists')->group(function() {
+                Route::resource('checklists', ChecklistController::class);
+                Route::resource('categories', CategoryController::class);
+                Route::resource('subcategories', SubcategoryController::class);
+            });
+            Route::middleware('permission:Create Survey')->group(function() {
+                Route::post('/surveys/{survey}/approve', [SurveyController::class, 'approve'])->name('surveys.approve');
+            });            
+        });
+    });
 });

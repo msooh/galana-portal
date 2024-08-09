@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StationManagerController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -17,36 +16,46 @@ use App\Http\Controllers\PermissionController;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-/*Route::get('/migrate', function () {
-    Artisan::call('migrate');
-    return 'Migrations have been run';
-});
-Route::get('/test-file', function () {
-    return response()->file(storage_path('app/public/police_files/1718805390_avatar.jpg'));
-});
-
-Route::get('/create-storage-link', function () {
-    $exitCode = Artisan::call('storage:link');
-    return 'Storage link created!';
-});
-*/
+// Uncomment the following routes if needed for testing or development
+// Route::get('/migrate', function () {
+//     Artisan::call('migrate');
+//     return 'Migrations have been run';
+// });
+// Route::get('/test-file', function () {
+//     return response()->file(storage_path('app/public/police_files/1718805390_avatar.jpg'));
+// });
+// Route::get('/create-storage-link', function () {
+//     $exitCode = Artisan::call('storage:link');
+//     return 'Storage link created!';
+// });
 
 foreach (glob(base_path('Modules/*/Routes/web.php')) as $routeFile) {
     require $routeFile;
 }
 
-
 Auth::routes();
 
-Route::middleware(['auth'])->group(function () {    
-    Route::resource('users', UserController::class)->middleware('can:manage_users');
-    Route::put('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
-    Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate'); 
-    Route::resource('permissions', PermissionController::class)->middleware('can:manage_users');   
-    Route::post('/permissions/assign', [PermissionController::class, 'assign'])->name('permissions.assign');
+// Group routes that require authentication and permissions
+Route::middleware(['auth'])->group(function () {   
+    
+    // User management routes
+    Route::middleware('permission:Manage Users')->group(function () {
+        Route::resource('users', UserController::class);        
+    });
 
+     // Permission management routes
+    Route::middleware('permission:Manage Permissions')->group(function () {
+        Route::resource('permissions', PermissionController::class);
+        Route::post('/permissions/assign', [PermissionController::class, 'assign'])->name('permissions.assign');
+    });
+    
+    // User activation and deactivation routes
+    Route::middleware('permission:Deactivate Users')->group(function () {
+        Route::put('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    });
+    Route::middleware('permission:Activate Users')->group(function () {
+        Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
+    });
 });
-
-

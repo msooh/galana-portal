@@ -16,9 +16,23 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $this->authorize('Manage Users');
         $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
-        return view('permissions.index', compact('roles', 'permissions'));
+
+        $permissionGroups = [
+            'Dashboard' => $permissions->filter(function ($permission) {
+                return $permission->group === 'Dashboard';
+            }),
+            'User Management' => $permissions->filter(function ($permission) {
+                return $permission->group === 'User Management';
+            }),
+            'Retail Module' => $permissions->filter(function ($permission) {
+                return $permission->group === 'Retail Module';
+            }),
+            // Add more groups as needed
+        ];
+        return view('permissions.index', compact('roles', 'permissions', 'permissionGroups'));
     }
 
     /**
@@ -26,11 +40,22 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $this->authorize('Manage Users');
         $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
-        return view('permissions.create', compact('roles', 'permissions'));
+        $permissionGroups = Permission::all()->groupBy('group');
+        $assignedPermissions = collect();
+
+        // If a role is selected, fetch its permissions
+        if ($request->has('role_id')) {
+            $role = Role::find($request->input('role_id'));
+            if ($role) {
+                $assignedPermissions = $role->permissions->pluck('id');
+            }
+        }
+        return view('permissions.create', compact('roles', 'permissions', 'permissionGroups', 'assignedPermissions'));
     }
 
     /**
@@ -41,26 +66,38 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('Manage Users');
         $request->validate([
-            'name' => 'required|string|unique:permissions',
+            'name' => 'required|string|max:255|unique:permissions,name',
+            'group' => 'required|string|max:255',
         ]);
 
-        Permission::create(['name' => $request->name]);
+        $permission = new Permission();
+        $permission->name = $request->input('name');
+        $permission->group = $request->input('group');
+        $permission->save();
 
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully');
+        return redirect()->back()->with('success', 'Permission created successfully!');
     }
 
     public function assign(Request $request)
     {
+        $this->authorize('Manage Users');
         $request->validate([
             'role_id' => 'required|exists:roles,id',
-            'permissions' => 'array|exists:permissions,id',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
-        $role = Role::findOrFail($request->role_id);
-        $role->permissions()->sync($request->permissions);
+        $role = Role::find($request->input('role_id'));
 
-        return redirect()->route('permissions.index')->with('success', 'Permissions assigned successfully');
+        if ($role) {
+            // Sync the permissions for the role
+            $role->permissions()->sync($request->input('permissions', []));
+            return redirect()->back()->with('success', 'Permissions assigned successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Role not found!');
     }
 
     /**

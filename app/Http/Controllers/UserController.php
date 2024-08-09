@@ -17,6 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
+         
+        $this->authorize('Manage Users');
         $roles = Role::all();
         $users = User::all();
         return view('users.index', compact('roles', 'users'));
@@ -29,6 +31,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        
+        $this->authorize('Manage Users');
         $roles = Role::all();
         return view('users.create', compact('roles'));
     }
@@ -41,6 +45,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('Manage Users');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -98,6 +103,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('Manage Users');
         $user = User::findOrFail($id);
 
         $request->validate([
@@ -134,6 +140,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('Manage Users');
         $user = User::findOrFail($id);
         $user->delete();
 
@@ -143,6 +150,7 @@ class UserController extends Controller
 
     public function deactivate($id)
     {
+        $this->authorize('Manage Users');
         $user = User::findOrFail($id);
 
         $user->is_active = false;
@@ -154,6 +162,7 @@ class UserController extends Controller
 
     public function activate($id)
     {
+        $this->authorize('Manage Users');
         $user = User::findOrFail($id);
 
         $user->is_active = true;

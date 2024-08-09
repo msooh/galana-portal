@@ -39,7 +39,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('surveys.index') }}"> History</a></li>
             </ul>
         </li>
-        @can('manage_checklists')
+        @can('Manage Checklists')
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">
@@ -54,7 +54,7 @@
         </li>
         @endcan    
         <li class="nav-divider"></li>  
-        @can('manage_stations')
+        @can('Setup Module')
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">

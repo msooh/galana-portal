@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row pt-5">
                 <!-- Retail Module Card -->               
-                @can('view_retail')
+                @can('Retail Module')
                 <div class="col-md-2 col-sm-3">
                     <a href="{{ route('retail.index') }}" class="counter-link">
                         <div class="counter blue">
@@ -19,7 +19,7 @@
                 </div>
                 @endcan
                 <!-- Feedback Module Card -->
-                @can('manage_suggestions')
+                @can('Finance Module')
                 <div class="col-md-2 col-sm-6">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">
@@ -32,7 +32,7 @@
                 </div>
                 @endcan
                 <!-- Maintenance Module Card -->
-                @can('manage_suggestions')
+                @can('Maintenance Module')
                 <div class="col-md-2 col-sm-6">
                     <a href="#" class="counter-link">
                         <div class="counter blue">
@@ -45,7 +45,7 @@
                 </div>
                 @endcan
                 <!-- HSSEQ Module Card -->
-                @can('manage_safeties')
+                @can('HSSEQ Module')
                 <div class="col-md-2 col-sm-6">
                     <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
                         <div class="counter blue">
@@ -58,7 +58,7 @@
                 </div>
                 @endcan
                  <!-- Customer Feedback Module Card -->
-                 @can('manage_feedback')
+                 @can('Feedback Module')
                 <div class="col-md-2 col-sm-6">
                     <a href="{{ route('feedback.dashboard') }}" class="counter-link">
                         <div class="counter blue">
@@ -71,7 +71,7 @@
                 </div>
                 @endcan
                 <!-- Feedback Module Card -->
-                @can('manage_suggestions')
+                @can('Suggestions Module')
                 <div class="col-md-2 col-sm-6">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">

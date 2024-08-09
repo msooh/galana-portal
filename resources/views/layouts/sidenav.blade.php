@@ -18,7 +18,7 @@
         </li>
         <li class="nav-title"></li>     
       
-        @can('manage_users')
+        @can('Manage Users')
         <li class="nav-title">USERS</li>
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
@@ -38,11 +38,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('permissions.create') }}" target="_top">
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg>Permissions</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('permissions.index') }}" target="_top">
-                    <svg class="nav-icon">
-                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg>List Permissions</a></li>
+                    </svg>Permissions</a></li>                
                 <li class="nav-item"><a class="nav-link" href="404.html" target="_top">
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-bug') }}"></use>

@@ -32,7 +32,7 @@ return new class extends Migration
 
             $table->foreign('shift_id')->references('id')->on('shifts')->onDelete('cascade');
             $table->foreign('pump_id')->references('id')->on('pumps')->onDelete('cascade');
-            $table->foreign('attendant_id')->references('id')->on('attendants')->onDelete('cascade');
+            $table->foreign('attendant_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('closed_by')->references('id')->on('users')->onDelete('cascade');
        
         });

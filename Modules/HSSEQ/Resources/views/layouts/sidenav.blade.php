@@ -24,7 +24,7 @@
             </svg>Dashboard</a>
         </li>
         <li class="nav-title"></li>
-        @can('manage_safeties')
+        @can('HSSEQ Module')
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">
@@ -37,7 +37,7 @@
             </ul>
         </li>
         @endcan
-        @can('manage_tasks')
+        @can('Manage Tasks')
         <li class="nav-title">Tasks</li>
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">

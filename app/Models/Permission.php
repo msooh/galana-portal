@@ -14,7 +14,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'group'];
 
     /**
      * The roles that belong to the permission.
@@ -23,4 +23,5 @@ class Permission extends Model
     {
         return $this->belongsToMany(Role::class, 'role_permission');
     }
+   
 }

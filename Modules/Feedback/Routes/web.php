@@ -16,9 +16,13 @@ use Modules\Feedback\Http\Controllers\CustomerFeedbackController;
 */
 Route::get('/galana-virtual-feedback', [FeedbackController::class, 'staff'])->name('feedback.staff');
 Route::post('/staff-feedback-submit', [FeedbackController::class, 'submit'])->name('feedback.submit');
-Route::prefix('customer-feedback')->group(function() {    
-    Route::get('/', [FeedbackController::class, 'index'])->name('feedback.dashboard');
-    Route::get('/staff-feedback', [FeedbackController::class, 'staffList'])->name('staff-feedback.list');
-    Route::resource('feedback', CustomerFeedbackController::class);
-   
+Route::middleware(['auth'])->group(function () {
+    Route::middleware('permission:Feedback Module')->group(function() {
+        Route::prefix('customer-feedback')->group(function() {    
+            Route::get('/', [FeedbackController::class, 'index'])->name('feedback.dashboard');
+            Route::get('/staff-feedback', [FeedbackController::class, 'staffList'])->name('staff-feedback.list');
+            Route::resource('feedback', CustomerFeedbackController::class);
+        
+        });
+    });
 });

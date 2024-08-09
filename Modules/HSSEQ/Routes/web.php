@@ -14,12 +14,19 @@ use Modules\HSSEQ\Http\Controllers\HSSEQController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('hsseq')->group(function() {
-    Route::get('/', [HSSEQController::class, 'index'])->name('hsseq.dashboard');
-    Route::resource('hsseq', SafetyController::class)->middleware('can:manage_safeties');
-    Route::post('/safety/{report}/assign-task', [SafetyController::class, 'assignTask'])->name('safety.assignTask');
-    Route::get('/safeties/pending', [SafetyController::class, 'pendingSafeties'])->name('safeties.pending');
-    Route::post('/safeties/close-task/{id}', [SafetyController::class, 'closeTask'])->name('safeties.closeTask');
-    Route::get('/safeties/closed-tasks', [SafetyController::class, 'closedTasks'])->name('safeties.closedTasks');
+Route::middleware(['auth'])->group(function () {
+    Route::middleware('permission:HSSEQ Module')->group(function() {
+        Route::prefix('hsseq')->group(function() {
+            Route::get('/', [HSSEQController::class, 'index'])->name('hsseq.dashboard');
+            Route::middleware('permission:Safety Reports')->group(function() {
+                Route::resource('hsseq', SafetyController::class);
+                Route::get('/safeties/pending', [SafetyController::class, 'pendingSafeties'])->name('safeties.pending');
+                Route::middleware('permission:Manage Tasks')->group(function() {                
+                    Route::post('/safety/{report}/assign-task', [SafetyController::class, 'assignTask'])->name('safety.assignTask');
+                    Route::post('/safeties/close-task/{id}', [SafetyController::class, 'closeTask'])->name('safeties.closeTask');
+                    Route::get('/safeties/closed-tasks', [SafetyController::class, 'closedTasks'])->name('safeties.closedTasks');
+                });
+            });
+        });
+    });
 });
