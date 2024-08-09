@@ -9,7 +9,7 @@
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="fs-4 fw-semibold"> <span class="fs-6 fw-normal">({{ number_format($dashboardData['tmPercentageChange'], 2) }}%
+                        <div class="fs-4 fw-semibold"> {{$dashboardData['territoryManagersCount']}}<span class="fs-6 fw-normal">({{ number_format($dashboardData['tmPercentageChange'], 2) }}%
                                 @if ($dashboardData['tmPercentageChange'] > 0)
                                 <svg class="icon">
                                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>

@@ -22,7 +22,21 @@
             <meta name="msapplication-TileColor" content="#ffffff">
             <meta name="msapplication-TileImage" content="{{ asset('assets/favicon/ms-icon-144x144.png') }}">
             <meta name="theme-color" content="#ffffff">
-        
+            <!-- Font Awesome -->
+            <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+            />
+            <!-- Google Fonts -->
+            <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+            />
+            <!-- MDB -->
+            <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
+            rel="stylesheet"
+            />
             <!-- Vendor styles -->            
             <link href="{{ asset('vendors/simplebar/css/simplebar.css') }}" rel="stylesheet">
             <link href="{{ asset('css/vendors/simplebar.css') }}" rel="stylesheet">
@@ -58,6 +72,11 @@
     <!-- CoreUI and necessary plugins-->
     <script src="{{ asset('vendors/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('vendors/jquery/jquery-ui.min.js') }}"></script>
+    <!-- MDB -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
+    ></script>
     <script src="{{ asset('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
     <script src="{{ asset('vendors/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>

@@ -27,9 +27,14 @@ class RetailController extends Controller
         $currentMonth = date('m');
 
         // Count Territory Managers for the current month
-        $currentMonthTMs = User::whereHas('roles', function ($query) use ($tmRoleId) {
-            $query->where('role_id', $tmRoleId);
+        $currentMonthTMs = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Territory Manager (TM)');
         })->whereMonth('created_at', $currentMonth)->count();
+        $tmsCount = User::whereHas('roles', function($query) {
+            $query->where('name', 'Territory Manager (TM)');
+        })->count();
+        $tmPercentageChange = $tmsCount > 0 ? ($currentMonthTMs / $tmsCount) * 100 : 0;
+
 
         // Calculate other values
         $surveyCount = Survey::count();
@@ -37,6 +42,7 @@ class RetailController extends Controller
         $dealersCount =  User::whereHas('roles', function($query) {
             $query->where('name', 'Dealer');
         })->count();
+        
 
         // Calculate visits and visit rate
         $expectedVisits = 2 * $stationsCount; // Assuming 2 visits per station per month
@@ -57,8 +63,8 @@ class RetailController extends Controller
         $newUsersPercentage = $newUsers > 0 ? ($newUsers / User::count()) * 100 : 0;
 
         return [
-            'territoryManagersCount' => $currentMonthTMs,
-            'tmPercentageChange' => 0, // You can calculate this if needed
+            'territoryManagersCount' => $tmsCount,
+            'tmPercentageChange' => $tmPercentageChange,
             'surveyCount' => $surveyCount,
             'stationsCount' => $stationsCount,
             'dealersCount' => $dealersCount,

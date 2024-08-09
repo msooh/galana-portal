@@ -61,7 +61,8 @@
                     <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-building') }}"></use>
                 </svg> Setup
             </a>
-            <ul class="nav-group-items">            
+            <ul class="nav-group-items">  
+                <li class="nav-item"><a class="nav-link" href="{{ route('territory_managers.index') }}"><span class="nav-icon"></span> TM's</a></li>          
                 <li class="nav-item"><a class="nav-link" href="{{ route('dealers.index') }}"><span class="nav-icon"></span> Dealers</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('station_managers.index') }}"><span class="nav-icon"></span> Station Managers</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('stations.index') }}"><span class="nav-icon"></span>Service Stations</a></li>

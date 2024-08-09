@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Setup\Http\Controllers\DealerController;
 use Modules\Setup\Http\Controllers\StationController;
 use Modules\Setup\Http\Controllers\StationManagerController;
+use Modules\Setup\Http\Controllers\TerritoryManagerController;
 use Modules\Setup\Http\Controllers\LocationController;
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,13 @@ Route::middleware(['auth'])->group(function () {
             Route::patch('station-managers/{id}/activate', [StationManagerController::class, 'activate'])->name('setup::station_managers.activate');
             Route::post('station_managers/{manager}/assign_station', [StationManagerController::class, 'assignStation'])->name('station_managers.assign_station');
             Route::patch('station-managers/{id}/reassign-station', [StationManagerController::class, 'reassignStation'])->name('station_managers.reassign_station');
+        });
+        Route::middleware('permission:Manage Territory Managers')->group(function() {
+            Route::resource('territory_managers', TerritoryManagerController::class);
+            Route::patch('territory-managers/{id}/deactivate', [TerritoryManagerController::class, 'deactivate'])->name('setup::territory_managers.deactivate');
+            Route::patch('territory-managers/{id}/activate', [TerritoryManagerController::class, 'activate'])->name('setup::territory_managers.activate');
+            Route::post('territory_managers/{manager}/assign_station', [TerritoryManagerController::class, 'assignStation'])->name('territory_managers.assign_station');
+            Route::patch('territory-managers/{id}/reassign-station', [TerritoryManagerController::class, 'reassignStation'])->name('territory_managers.reassign_station');
         });
     });
 });
