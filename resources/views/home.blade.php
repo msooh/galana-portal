@@ -82,7 +82,20 @@
                         </div>
                     </a>
                 </div>
-                @endcan               
+                @endcan  
+                 <!-- Feedback Module Card -->
+                 @can('Suggestions Module')
+                 <div class="col-md-2 col-sm-6">
+                     <a href="{{ route('foundation.dashboard') }}" class="counter-link">
+                         <div class="counter blue">
+                             <div class="counter-icon">
+                                 <i class="fa fa-users"></i>
+                             </div>                       
+                             <h3>Galana Foundation</h3>
+                         </div>
+                     </a>
+                 </div>
+                 @endcan                
             </div>
         </div>       
     </div>

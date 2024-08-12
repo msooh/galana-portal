@@ -5,6 +5,7 @@ use Modules\Setup\Http\Controllers\StationController;
 use Modules\Setup\Http\Controllers\StationManagerController;
 use Modules\Setup\Http\Controllers\TerritoryManagerController;
 use Modules\Setup\Http\Controllers\LocationController;
+use Modules\Setup\Http\Controllers\SetupController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
