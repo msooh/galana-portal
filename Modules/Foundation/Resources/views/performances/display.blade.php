@@ -40,8 +40,10 @@
                                             <th>Form</th>
                                             <th>Term</th>
                                             <th>Mid Term Mean Score</th>
+                                            <th>Mid Term Grade</th>
                                             <th>Mid Term Position</th>
                                             <th>End Term Mean Score</th>
+                                            <th>End Term Grade</th>
                                             <th>End Term Position</th>
                                         </tr>
                                     </thead>
@@ -53,9 +55,11 @@
                                                 <td>{{ $performance->student->gender }}</td>
                                                 <td>{{ $performance->year }}</td>
                                                 <td>{{ $performance->term }}</td>
-                                                <td>{{ $performance->mid_mean_score }}</td>
+                                                <td>{{ $performance->mid_mean_score }}%</td>
+                                                <td>{{ $performance->mid_term_grade }}</td>
                                                 <td>{{ $performance->mid_term_position }}</td>
-                                                <td>{{ $performance->end_term_mean_score }}</td>
+                                                <td>{{ $performance->end_term_mean_score }}%</td>
+                                                <td>{{ $performance->end_term_grade }}</td>
                                                 <td>{{ $performance->end_term_position }}</td>
                                             </tr>
                                         @endforeach

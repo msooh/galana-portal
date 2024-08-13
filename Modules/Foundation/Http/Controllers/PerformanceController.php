@@ -45,9 +45,11 @@ class PerformanceController extends Controller
             'year' => 'required|in:1,2,3,4',
             'term' => 'required|in:1,2,3',
             'mid_mean_score' => 'nullable|numeric|min:0|max:100',
+            'mid_term_grade' => 'nullable|string|max:10',
             'mid_term_position_number' => 'nullable|numeric',
             'mid_term_position_total' => 'nullable|numeric',
             'end_term_mean_score' => 'nullable|numeric|min:0|max:100',
+            'end_term_grade' => 'nullable|string|max:10',
             'end_term_position_number' => 'nullable|numeric',
             'end_term_position_total' => 'nullable|numeric',
         ]);
@@ -108,9 +110,11 @@ class PerformanceController extends Controller
             'year' => 'required|in:1,2,3,4',
             'term' => 'required|in:1,2,3',
             'mid_mean_score' => 'nullable|numeric|min:0|max:100',
+            'mid_term_grade' => 'nullable|string|max:10',
             'mid_term_position_number' => 'nullable|numeric',
             'mid_term_position_total' => 'nullable|numeric',
             'end_term_mean_score' => 'nullable|numeric|min:0|max:100',
+            'end_term_grade' => 'nullable|string|max:10',
             'end_term_position_number' => 'nullable|numeric',
             'end_term_position_total' => 'nullable|numeric',
         ]);
