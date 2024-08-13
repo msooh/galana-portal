@@ -12,7 +12,7 @@ class Survey extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date', 'time', 'total_marks', 'comment', 'station_id', 'created_by', 'updated_by'];
+    protected $fillable = ['date', 'time', 'total_marks', 'latitude', 'longitude', 'comment', 'station_id', 'created_by', 'updated_by'];
 
     public function responses()
     {
