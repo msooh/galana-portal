@@ -73,112 +73,81 @@ class SurveyController extends Controller
             // Validate the form data
             $validatedData = $request->validate([
                 'station_id' => 'required|exists:stations,id',
-                'responses.*' => 'required|in:Yes,No,N/A',
-                'attachments.*' => 'nullable|file|image|max:4096', // 2MB max for images
-                'role' => 'required|string|in:Dealer,Station Manager',                
-                'signature_image' => 'required',// 2MB max for signature images
+                'responses.*.response' => 'required|string',
+                'responses.*.comment' => 'nullable|string',
+                'attachments.*' => 'nullable|file|image|max:4096',
+                'role' => 'required|string|in:Dealer,Station Manager',
+                'signature_image' => 'required|string',
                 'comment' => 'nullable|string|max:1000',
                 'weight' => 'nullable|numeric',
             ]);
-           
+
+            // Get IP and location data
             $ip = $request->ip();
             $location = Location::get($ip);
-            
-            // Debugging information using dd()
-            //dd("IP Address: $ip", "Location Data: ", $location);
 
-            $location = Location::get($request->ip());
-    
             // Create a new Survey
-            $survey = new Survey();
-            $survey->date = now()->toDateString(); // Save current date
-            $survey->time = now()->toTimeString(); // Save current time
-            $survey->station_id = $validatedData['station_id'];
-          
-            $survey->created_by = auth()->user()->id;
-
-            if ($location) {
-                $survey->latitude = $location->latitude;
-                $survey->longitude = $location->longitude;
-            }
+            $survey = new Survey([
+                'date' => now()->toDateString(),
+                'time' => now()->toTimeString(),
+                'station_id' => $validatedData['station_id'],
+                'created_by' => auth()->user()->id,
+                'latitude' => optional($location)->latitude,
+                'longitude' => optional($location)->longitude,
+            ]);
             $survey->save();
-    
-            $surveyId = $survey->id;
-    
+
             // Iterate through responses and save them
-            foreach ($validatedData['responses'] as $index => $response) {
-                $checklistItemId = $index; // Use $index directly as it corresponds to the checklist item ID
-    
-                // Handle file upload for each response if needed
-                $attachment = $request->file('attachments.' . $index);
-    
-                // Save the response
-                $newResponse = new Response();
-                $newResponse->checklist_item_id = $checklistItemId;
-                $newResponse->survey_id = $surveyId;
-                $newResponse->response = $response;
-    
-                // If there's an attachment, handle it
-                if ($attachment) {
-                    // Save attachment to public storage
-                    $attachmentPath = $attachment->store('public/attachments');
-                    // Get the path without the 'public/' prefix
-                    $publicPath = str_replace('public/', '', $attachmentPath);
+            foreach ($validatedData['responses'] as $checklistItemId => $response) {
+                $newResponse = new Response([
+                    'checklist_item_id' => $checklistItemId,
+                    'survey_id' => $survey->id,
+                    'response' => $response['response'],
+                    'comment' => $response['comment'] ?? null,
+                ]);
+
+                // Handle file attachment
+                if ($attachment = $request->file('attachments.' . $checklistItemId)) {
+                    $publicPath = $attachment->store('attachments', 'public');
                     $newResponse->file_path = $publicPath;
-                }   
-                
+                }
+
                 $newResponse->save();
             }
-    
-            $signature = new Signature();
-            $signature->survey_id = $surveyId;
-            $signature->role = $validatedData['role'];   
-    
+
+            // Save Signature
             $signatureImage = $validatedData['signature_image'];
-    
-            // Extract base64 image data
-            $data = substr($signatureImage, strpos($signatureImage, ',') + 1);
-    
-            // Decode base64 data
-            $decodedImage = base64_decode($data);
-    
-            // Generate a unique filename
-            $filename = uniqid() . '.png'; 
-    
-            // Save the decoded image data to storage in public folder
-            Storage::disk('public')->put('signatures/' . $filename, $decodedImage);
-    
-            // Set the path to the saved image
-            $signature->signature_image = 'signatures/' . $filename;
-    
-            $signature->save();            
-    
-            // Save comment if provided
-            if (isset($validatedData['comment'])) {
-                $survey->comment = $validatedData['comment'];
-                $survey->save();
+            $data = base64_decode(substr($signatureImage, strpos($signatureImage, ',') + 1));
+            $filename = uniqid() . '.png';
+            Storage::disk('public')->put('signatures/' . $filename, $data);
+
+            $signature = new Signature([
+                'survey_id' => $survey->id,
+                'role' => $validatedData['role'],
+                'signature_image' => 'signatures/' . $filename,
+            ]);
+            $signature->save();
+
+            // Save optional comment
+            if (!empty($validatedData['comment'])) {
+                $survey->update(['comment' => $validatedData['comment']]);
             }
-    
-            // Optionally, calculate total marks
-            $totalYes = count(array_filter($validatedData['responses'], function ($response) {
-                return $response === 'Yes';
-            }));
-            $totalNo = count(array_filter($validatedData['responses'], function ($response) {
-                return $response === 'No';
-            }));
-            $totalMarks = ($totalYes / ($totalYes + $totalNo)) * 100;
-    
-            // Update the survey with total marks
-            $survey->total_marks = $totalMarks;
-            $survey->save();
-    
+
+            // Calculate total marks
+            $totalYes = count(array_filter($validatedData['responses'], fn($response) => $response['response'] === 'Yes'));
+            $totalNo = count(array_filter($validatedData['responses'], fn($response) => $response['response'] === 'No'));
+            $totalMarks = ($totalYes + $totalNo) ? ($totalYes / ($totalYes + $totalNo)) * 100 : 0;
+
+            $survey->update(['total_marks' => $totalMarks]);
+
             // Return success message
             return redirect()->back()->with('success', 'Survey submitted successfully!');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Return error message
-            return redirect()->back()->with('error', 'An error occurred while submitting the survey.');
+            return redirect()->back()->with('error', 'An error occurred while submitting the survey: ' . $e->getMessage());
         }
     }
+
 
     public function approve(Request $request, Survey $survey)
     {

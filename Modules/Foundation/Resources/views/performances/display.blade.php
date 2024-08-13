@@ -52,7 +52,7 @@
                                             <tr>
                                                 <td>{{ $performance->student->name }}</td>
                                                 <td>{{ $performance->student->school->name }}</td>
-                                                <td>{{ $performance->student->gender }}</td>
+                                                <td>{{ ucfirst($performance->student->gender) }}</td>
                                                 <td>{{ $performance->year }}</td>
                                                 <td>{{ $performance->term }}</td>
                                                 <td>{{ $performance->mid_mean_score ? $performance->mid_mean_score . '%' : '--' }}</td>

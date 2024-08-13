@@ -83,90 +83,103 @@
                                         </div>
                                     </div>
 
-                                    <!-- Edit Modal -->
-                                    <div class="modal fade" id="editModal{{ $performance->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $performance->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel{{ $performance->id }}">Edit Performance Record</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('performances.update', $performance->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
+                                    <!-- Edit Modal -->                                
+                                <div class="modal fade" id="editModal{{ $performance->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $performance->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editModalLabel{{ $performance->id }}">Edit Performance Record</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('performances.update', $performance->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
 
-                                                        <div class="form-group">
-                                                            <label for="student_id">Student</label>
-                                                            <select name="student_id" class="form-control" id="student_id" required>
-                                                                @foreach($students as $student)
-                                                                    <option value="{{ $student->id }}" {{ $performance->student_id == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label for="student_id">Student</label>
+                                                        <select name="student_id" class="form-control" id="student_id" required>
+                                                            @foreach($students as $student)
+                                                                <option value="{{ $student->id }}" {{ $performance->student_id == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
 
-                                                        <div class="form-group">
-                                                            <label for="year">Year</label>
-                                                            <select name="year" class="form-control" id="year" required>
-                                                                <option value="1" {{ $performance->year == '1' ? 'selected' : '' }}>1</option>
-                                                                <option value="2" {{ $performance->year == '2' ? 'selected' : '' }}>2</option>
-                                                                <option value="3" {{ $performance->year == '3' ? 'selected' : '' }}>3</option>
-                                                                <option value="4" {{ $performance->year == '4' ? 'selected' : '' }}>4</option>
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label for="year">Year</label>
+                                                        <select name="year" class="form-control" id="year" required>
+                                                            <option value="1" {{ $performance->year == '1' ? 'selected' : '' }}>1</option>
+                                                            <option value="2" {{ $performance->year == '2' ? 'selected' : '' }}>2</option>
+                                                            <option value="3" {{ $performance->year == '3' ? 'selected' : '' }}>3</option>
+                                                            <option value="4" {{ $performance->year == '4' ? 'selected' : '' }}>4</option>
+                                                        </select>
+                                                    </div>
 
-                                                        <div class="form-group">
-                                                            <label for="term">Term</label>
-                                                            <select name="term" class="form-control" id="term" required>
-                                                                <option value="1" {{ $performance->term == '1' ? 'selected' : '' }}>1</option>
-                                                                <option value="2" {{ $performance->term == '2' ? 'selected' : '' }}>2</option>
-                                                                <option value="3" {{ $performance->term == '3' ? 'selected' : '' }}>3</option>
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label for="term">Term</label>
+                                                        <select name="term" class="form-control" id="term" required>
+                                                            <option value="1" {{ $performance->term == '1' ? 'selected' : '' }}>1</option>
+                                                            <option value="2" {{ $performance->term == '2' ? 'selected' : '' }}>2</option>
+                                                            <option value="3" {{ $performance->term == '3' ? 'selected' : '' }}>3</option>
+                                                        </select>
+                                                    </div>
 
-                                                        <div class="form-group">
-                                                            <label for="mid_mean_score">Mid Term Mean Score</label>
-                                                            <input type="number" step="0.01" name="mid_mean_score" class="form-control" id="mid_mean_score" value="{{ $performance->mid_mean_score }}" required>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label for="mid_mean_score">Mid Term Mean Score</label>
+                                                        <input type="number" step="0.01" name="mid_mean_score" class="form-control" id="mid_mean_score" value="{{ $performance->mid_mean_score }}">
+                                                    </div>
 
-                                                        <!-- Mid-Term Position -->
-                                                        <div class="form-group">
-                                                            <label for="mid_term_position">Mid-Term Position</label>
-                                                            <div class="input-group">
-                                                                <input type="number" class="form-control" id="mid_term_position" name="mid_term_position_number" value="{{ explode(' out of ', $performance->mid_term_position)[0] }}" placeholder="Position" required>
-                                                                <div class="input-group-append">
-                                                                    <span class="input-group-text">out of</span>
-                                                                </div>
-                                                                <input type="number" class="form-control" id="mid_term_position_total" name="mid_term_position_total" value="{{ explode(' out of ', $performance->mid_term_position)[1] }}" placeholder="Total Students" required>
+                                                    <!-- Mid-Term Grade -->
+                                                    <div class="form-group">
+                                                        <label for="mid_term_grade">Mid-Term Grade</label>
+                                                        <input type="text" name="mid_term_grade" class="form-control" id="mid_term_grade" value="{{ $performance->mid_term_grade }}">
+                                                    </div>
+
+                                                    <!-- Mid-Term Position -->
+                                                    <div class="form-group">
+                                                        <label for="mid_term_position">Mid-Term Position</label>
+                                                        <div class="input-group">
+                                                            <input type="number" class="form-control" id="mid_term_position" name="mid_term_position_number" value="{{ explode(' out of ', $performance->mid_term_position)[0] }}" placeholder="Position">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">out of</span>
                                                             </div>
+                                                            <input type="number" class="form-control" id="mid_term_position_total" name="mid_term_position_total" value="{{ explode(' out of ', $performance->mid_term_position)[1] }}" placeholder="Total Students">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group">
-                                                            <label for="end_term_mean_score">End Term Mean Score</label>
-                                                            <input type="number" step="0.01" name="end_term_mean_score" class="form-control" id="end_term_mean_score" value="{{ $performance->end_term_mean_score }}" required>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label for="end_term_mean_score">End Term Mean Score</label>
+                                                        <input type="number" step="0.01" name="end_term_mean_score" class="form-control" id="end_term_mean_score" value="{{ $performance->end_term_mean_score }}">
+                                                    </div>
 
-                                                        <!-- End-Term Position -->
-                                                        <div class="form-group">
-                                                            <label for="end_term_position">End-Term Position</label>
-                                                            <div class="input-group">
-                                                                <input type="number" class="form-control" id="end_term_position" name="end_term_position_number" value="{{ explode(' out of ', $performance->end_term_position)[0] }}" placeholder="Position" required>
-                                                                <div class="input-group-append">
-                                                                    <span class="input-group-text">out of</span>
-                                                                </div>
-                                                                <input type="number" class="form-control" id="end_term_position_total" name="end_term_position_total" value="{{ explode(' out of ', $performance->end_term_position)[1] }}" placeholder="Total Students" required>
+                                                    <!-- End-Term Grade -->
+                                                    <div class="form-group">
+                                                        <label for="end_term_grade">End-Term Grade</label>
+                                                        <input type="text" name="end_term_grade" class="form-control" id="end_term_grade" value="{{ $performance->end_term_grade }}">
+                                                    </div>
+
+                                                    <!-- End-Term Position -->
+                                                    <div class="form-group">
+                                                        <label for="end_term_position">End-Term Position</label>
+                                                        <div class="input-group">
+                                                            <input type="number" class="form-control" id="end_term_position" name="end_term_position_number" value="{{ explode(' out of ', $performance->end_term_position)[0] }}" placeholder="Position">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">out of</span>
                                                             </div>
+                                                            <input type="number" class="form-control" id="end_term_position_total" name="end_term_position_total" value="{{ explode(' out of ', $performance->end_term_position)[1] }}" placeholder="Total Students">
                                                         </div>
+                                                    </div>
 
-                                                        <button type="submit" class="btn btn-primary mt-3">Update Performance Record</button>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                </div>
+                                                    <button type="submit" class="btn btn-primary mt-3">Update Performance Record</button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
 
                                 @endforeach
                             </tbody>

@@ -33,8 +33,8 @@
                                                 <img class="avatar-img" src="{{ asset('assets/img/avatars/default.jpg') }}" alt="Default Photo" style="width: 40px; height: 40px; object-fit: cover;">
                                             @endif
                                         </td>                                        
-                                        <td>{{ $student->name }}</td>
-                                        <th>{{ $student->gender }}</th>
+                                        <td>{{ $student->name }}</td>                                       
+                                        <th>{{ ucfirst($student->gender) }}</th>
                                         <td>{{ $student->county }}</td>
                                         <td>{{ $student->sub_county }}</td>
                                         <td>{{ $student->location }}</td>
