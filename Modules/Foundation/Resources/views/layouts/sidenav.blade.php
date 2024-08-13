@@ -27,13 +27,12 @@
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">
-                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-notes') }}"></use>
+                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
                 </svg> Students
             </a>
             <ul class="nav-group-items">
                 <li class="nav-item"><a class="nav-link" href="{{ route('students.create') }}"> New Student </a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('students.index') }}"> Student List </a></li>
-                <li class="nav-item"><a class="nav-link" href="#"> Performance </a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('students.index') }}"> Student List </a></li>                
                 <!--<li class="nav-item"><a class="nav-link" href="#"> Reports </a></li>-->
             </ul>
         </li>
@@ -41,6 +40,18 @@
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">
                     <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-notes') }}"></use>
+                </svg> Performances
+            </a>
+            <ul class="nav-group-items">                
+                <li class="nav-item"><a class="nav-link" href="{{ route('performances.create') }}"> Record Performance </a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('performances.index') }}">List Performances </a></li>
+                <!--<li class="nav-item"><a class="nav-link" href="#"> Reports </a></li>-->
+            </ul>
+        </li>
+        <li class="nav-group">
+            <a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-bank') }}"></use>
                 </svg> Accounts
             </a>
             <ul class="nav-group-items">
@@ -53,7 +64,7 @@
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon">
-                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-notes') }}"></use>
+                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-school') }}"></use>
                 </svg> Schools
             </a>
             <ul class="nav-group-items">

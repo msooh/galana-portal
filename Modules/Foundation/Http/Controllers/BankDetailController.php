@@ -18,9 +18,9 @@ class BankDetailController extends Controller
      */
     public function index()
     {
-        $bankDetails = BankDetail::with('student')->get();
-        $students = Student::all(); 
-        return view('foundation::accounts.bank-details', compact('bankDetails', 'students'));
+        $bankDetails = BankDetail::with('school')->get();
+        $schools = School::all(); 
+        return view('foundation::accounts.bank-details', compact('bankDetails', 'schools'));
        
     }
 
@@ -42,7 +42,7 @@ class BankDetailController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'student_id' => 'required|exists:students,id',
+            'school_id' => 'required|exists:schools,id',
             'bank' => 'required|string|max:255',
             'account_no' => 'required|string|max:255',
             'account_name' => 'required|string',
@@ -50,7 +50,7 @@ class BankDetailController extends Controller
         ]);
 
         BankDetail::create([
-            'student_id' => $request->input('student_id'),
+            'school_id' => $request->input('school_id'),
             'bank' => $request->input('bank'),
             'account_no' => $request->input('account_no'),
             'account_name' => $request->input('account_name'),

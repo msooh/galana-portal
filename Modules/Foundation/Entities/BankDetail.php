@@ -10,7 +10,7 @@ class BankDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'bank', 'account_no', 'account_name', 'branch'
+        'school_id', 'bank', 'account_no', 'account_name', 'branch'
     ];
     
     protected static function newFactory()
@@ -18,8 +18,8 @@ class BankDetail extends Model
         return \Modules\Foundation\Database\factories\BankDetailFactory::new();
     }
 
-    public function student()
+    public function school()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(School::class);
     }
 }

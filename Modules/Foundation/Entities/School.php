@@ -10,7 +10,7 @@ class School extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'location'];
-    
+
     protected static function newFactory()
     {
         return \Modules\Foundation\Database\factories\SchoolFactory::new();
@@ -19,5 +19,10 @@ class School extends Model
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function bankDetails()
+    {
+        return $this->hasOne(BankDetail::class);
     }
 }

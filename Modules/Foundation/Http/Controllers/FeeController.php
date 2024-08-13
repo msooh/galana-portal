@@ -6,6 +6,11 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+use Modules\Foundation\Entities\Fee;
+use Modules\Foundation\Entities\School;
+use Modules\Foundation\Entities\Student;
+use Modules\Foundation\Entities\OtherPayment;
+
 class FeeController extends Controller
 {
     /**
@@ -14,7 +19,10 @@ class FeeController extends Controller
      */
     public function index()
     {
-        return view('foundation::index');
+        $fees = Fee::with('student')->get(); 
+        $students = Student::all(); 
+
+        return view('foundation::accounts.fees', compact('fees', 'students'));
     }
 
     /**
@@ -23,7 +31,7 @@ class FeeController extends Controller
      */
     public function create()
     {
-        return view('foundation::create');
+        //return view('foundation::create');
     }
 
     /**
@@ -33,7 +41,37 @@ class FeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'year' => 'required|in:1,2,3,4',
+            'total_fees' => 'required|numeric',
+            'term_one_fees' => 'required|numeric',
+            'term_two_fees' => 'required|numeric',
+            'term_three_fees' => 'required|numeric',
+            'status' => 'required|in:paid,unpaid',
+            'uniform_others_amount' => 'nullable|numeric',
+            'mode_of_payment' => 'nullable|string|max:255',
+            'purpose' => 'nullable|array',
+            'amount' => 'nullable|array',
+        ]);
+
+        $fee = Fee::create($validatedData);
+
+        // Save additional payments
+        if ($request->filled('purpose')) {
+            foreach ($request->purpose as $index => $purpose) {
+                if (!empty($purpose) && !empty($request->amount[$index])) {
+                    OtherPayment::create([
+                        'fee_id' => $fee->id,
+                        'purpose' => $purpose,
+                        'amount' => $request->amount[$index],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('fees.index')->with('success', 'Fee payment created successfully.');
+   
     }
 
     /**
@@ -43,7 +81,7 @@ class FeeController extends Controller
      */
     public function show($id)
     {
-        return view('foundation::show');
+        //return view('foundation::show');
     }
 
     /**
@@ -53,7 +91,7 @@ class FeeController extends Controller
      */
     public function edit($id)
     {
-        return view('foundation::edit');
+        //return view('foundation::edit');
     }
 
     /**
@@ -62,9 +100,35 @@ class FeeController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Fee $fee)
     {
-        //
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'year' => 'required|in:1,2,3,4',
+            'total_fees' => 'required|numeric',
+            'term_one_fees' => 'required|numeric',
+            'term_two_fees' => 'required|numeric',
+            'term_three_fees' => 'required|numeric',
+            'status' => 'required|in:paid,unpaid',
+            'uniform_others_amount' => 'nullable|numeric',
+            'mode_of_payment' => 'nullable|string|max:255',
+            'purpose' => 'nullable|array',
+            'amount' => 'nullable|array',
+        ]);
+
+        $fee->purposes()->delete();
+
+        if ($request->has('purpose')) {
+            foreach ($request->purpose as $index => $purpose) {
+                $fee->purposes()->create([
+                    'purpose' => $purpose,
+                    'amount' => $request->amount[$index],
+                ]);
+            }
+        }
+
+        return redirect()->route('fees.index')->with('success', 'Fee payment updated successfully.');
+    
     }
 
     /**
@@ -74,6 +138,9 @@ class FeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $fee->delete();
+
+        return redirect()->route('fees.index')->with('success', 'Fee payment deleted successfully.');
+   
     }
 }

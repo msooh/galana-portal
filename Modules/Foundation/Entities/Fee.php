@@ -26,4 +26,8 @@ class Fee extends Model
     {
         return $this->belongsTo(Student::class);
     }
+    public function otherPayments()
+    {
+        return $this->hasMany(OtherPayment::class);
+    }
 }

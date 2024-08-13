@@ -10,7 +10,8 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'county', 'sub_county', 'location',
+        'name', 'age', 'photo', 'gender',
+        'county', 'sub_county', 'location',
         'father_name', 'father_phone',
         'mother_name', 'mother_phone',
         'guardian_name', 'guardian_phone',
@@ -26,11 +27,7 @@ class Student extends Model
     {
         return $this->hasMany(Fee::class);
     }
-
-    public function bankDetails()
-    {
-        return $this->hasOne(BankDetail::class);
-    }
+    
 
     public function performances()
     {

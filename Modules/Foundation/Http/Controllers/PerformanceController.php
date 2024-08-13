@@ -6,6 +6,10 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+use Modules\Foundation\Entities\School;
+use Modules\Foundation\Entities\Student;
+use Modules\Foundation\Entities\Performance;
+
 class PerformanceController extends Controller
 {
     /**
@@ -14,7 +18,9 @@ class PerformanceController extends Controller
      */
     public function index()
     {
-        return view('foundation::index');
+        $performances = Performance::with('student')->get();
+        $students = Student::all();
+        return view('foundation::performances.index', compact('performances', 'students'));
     }
 
     /**
@@ -23,7 +29,8 @@ class PerformanceController extends Controller
      */
     public function create()
     {
-        return view('foundation::create');
+        $students = Student::all();
+        return view('foundation::performances.create', compact('students'));        
     }
 
     /**
@@ -33,7 +40,39 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'year' => 'required|in:1,2,3,4',
+            'term' => 'required|in:1,2,3',
+            'mid_mean_score' => 'required|numeric|min:0|max:100',
+            'mid_term_position_number' => 'required|numeric',
+            'mid_term_position_total' => 'required|numeric',
+            'end_term_mean_score' => 'required|numeric|min:0|max:100',
+            'end_term_position_number' => 'required|numeric',
+            'end_term_position_total' => 'required|numeric',
+        ]);
+    
+        $mid_term_position = $request->mid_term_position_number . ' out of ' . $request->mid_term_position_total;
+        $end_term_position = $request->end_term_position_number . ' out of ' . $request->end_term_position_total;
+    
+        Performance::create([
+            'student_id' => $request->student_id,
+            'year' => $request->year,
+            'term' => $request->term,
+            'mid_mean_score' => $request->mid_mean_score,
+            'mid_term_position' => $mid_term_position,
+            'end_term_mean_score' => $request->end_term_mean_score,
+            'end_term_position' => $end_term_position,
+        ]);
+
+        return redirect()->route('performances.index')->with('success', 'Performance record created successfully.');
+    
+    }
+
+    public function display()
+    {
+        $performances = Performance::with('student.school')->get();
+        return view('foundation::performances.display', compact('performances'));
     }
 
     /**
@@ -62,9 +101,35 @@ class PerformanceController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Performance $performance)
     {
-        //
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'year' => 'required|in:1,2,3,4',
+            'term' => 'required|in:1,2,3',
+            'mid_mean_score' => 'required|numeric|min:0|max:100',
+            'mid_term_position_number' => 'required|numeric',
+            'mid_term_position_total' => 'required|numeric',
+            'end_term_mean_score' => 'required|numeric|min:0|max:100',
+            'end_term_position_number' => 'required|numeric',
+            'end_term_position_total' => 'required|numeric',
+        ]);
+    
+        $mid_term_position = $request->mid_term_position_number . ' out of ' . $request->mid_term_position_total;
+        $end_term_position = $request->end_term_position_number . ' out of ' . $request->end_term_position_total;
+    
+        $performance->update([
+            'student_id' => $request->student_id,
+            'year' => $request->year,
+            'term' => $request->term,
+            'mid_mean_score' => $request->mid_mean_score,
+            'mid_term_position' => $mid_term_position,
+            'end_term_mean_score' => $request->end_term_mean_score,
+            'end_term_position' => $end_term_position,
+        ]);
+
+        return redirect()->route('performances.index')->with('success', 'Performance record updated successfully.');
+   
     }
 
     /**

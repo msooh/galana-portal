@@ -51,7 +51,18 @@ class StudentController extends Controller
             'guardian_name' => 'nullable|string|max:255',
             'guardian_phone' => 'nullable|string|max:255',
             'school_id' => 'required|exists:schools,id',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'age' => 'nullable|integer|min:1',
+            'gender' => 'required|in:male,female',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $photoName = time() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('assets/photos'), $photoName);
+            $validated['photo'] = $photoName;
+        }   
+    
 
         Student::create($validated);
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
@@ -98,12 +109,29 @@ class StudentController extends Controller
             'guardian_name' => 'nullable|string|max:255',
             'guardian_phone' => 'nullable|string|max:255',
             'school_id' => 'required|exists:schools,id',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8192',
+            'age' => 'nullable|integer|min:1',
+            'gender' => 'required|in:male,female',
         ]);
 
-        $student->update($validated);
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+        if ($request->hasFile('photo')) {
+            // Delete the old photo
+            if ($student->photo && file_exists(public_path('assets/photos/' . $student->photo))) {
+                unlink(public_path('assets/photos/' . $student->photo));
+            }
     
+            $photo = $request->file('photo');
+            $photoName = time() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('assets/photos'), $photoName);
+            $validated['photo'] = $photoName;
+        }
+
+        // Update the student record
+        $student->update($validated);
+
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
