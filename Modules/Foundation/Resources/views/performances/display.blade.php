@@ -55,12 +55,12 @@
                                                 <td>{{ $performance->student->gender }}</td>
                                                 <td>{{ $performance->year }}</td>
                                                 <td>{{ $performance->term }}</td>
-                                                <td>{{ $performance->mid_mean_score }}%</td>
-                                                <td>{{ $performance->mid_term_grade }}</td>
-                                                <td>{{ $performance->mid_term_position }}</td>
-                                                <td>{{ $performance->end_term_mean_score }}%</td>
-                                                <td>{{ $performance->end_term_grade }}</td>
-                                                <td>{{ $performance->end_term_position }}</td>
+                                                <td>{{ $performance->mid_mean_score ? $performance->mid_mean_score . '%' : '--' }}</td>
+                                                <td>{{ $performance->mid_term_grade ?? '--' }}</td>
+                                                <td>{{ $performance->mid_term_position_number ?? '--' }} / {{ $performance->mid_term_position_total ?? '--' }}</td>
+                                                <td>{{ $performance->end_term_mean_score ? $performance->end_term_mean_score . '%' : '--' }}</td>
+                                                <td>{{ $performance->end_term_grade ?? '--' }}</td>
+                                                <td>{{ $performance->end_term_position_number ?? '--' }} / {{ $performance->end_term_position_total ?? '--' }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
