@@ -44,12 +44,12 @@ class PerformanceController extends Controller
             'student_id' => 'required|exists:students,id',
             'year' => 'required|in:1,2,3,4',
             'term' => 'required|in:1,2,3',
-            'mid_mean_score' => 'required|numeric|min:0|max:100',
-            'mid_term_position_number' => 'required|numeric',
-            'mid_term_position_total' => 'required|numeric',
-            'end_term_mean_score' => 'required|numeric|min:0|max:100',
-            'end_term_position_number' => 'required|numeric',
-            'end_term_position_total' => 'required|numeric',
+            'mid_mean_score' => 'nullable|numeric|min:0|max:100',
+            'mid_term_position_number' => 'nullable|numeric',
+            'mid_term_position_total' => 'nullable|numeric',
+            'end_term_mean_score' => 'nullable|numeric|min:0|max:100',
+            'end_term_position_number' => 'nullable|numeric',
+            'end_term_position_total' => 'nullable|numeric',
         ]);
     
         $mid_term_position = $request->mid_term_position_number . ' out of ' . $request->mid_term_position_total;
@@ -107,12 +107,12 @@ class PerformanceController extends Controller
             'student_id' => 'required|exists:students,id',
             'year' => 'required|in:1,2,3,4',
             'term' => 'required|in:1,2,3',
-            'mid_mean_score' => 'required|numeric|min:0|max:100',
-            'mid_term_position_number' => 'required|numeric',
-            'mid_term_position_total' => 'required|numeric',
-            'end_term_mean_score' => 'required|numeric|min:0|max:100',
-            'end_term_position_number' => 'required|numeric',
-            'end_term_position_total' => 'required|numeric',
+            'mid_mean_score' => 'nullable|numeric|min:0|max:100',
+            'mid_term_position_number' => 'nullable|numeric',
+            'mid_term_position_total' => 'nullable|numeric',
+            'end_term_mean_score' => 'nullable|numeric|min:0|max:100',
+            'end_term_position_number' => 'nullable|numeric',
+            'end_term_position_total' => 'nullable|numeric',
         ]);
     
         $mid_term_position = $request->mid_term_position_number . ' out of ' . $request->mid_term_position_total;

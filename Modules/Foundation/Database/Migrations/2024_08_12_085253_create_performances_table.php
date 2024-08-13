@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->enum('year', ['1', '2', '3', '4']); 
             $table->enum('term', ['1', '2', '3']); 
-            $table->decimal('mid_mean_score', 5, 2);
+            $table->decimal('mid_mean_score', 5, 2)->nullable();
             $table->string('mid_term_position')->nullable();
-            $table->decimal('end_term_mean_score', 5, 2);
+            $table->decimal('end_term_mean_score', 5, 2)->nullable();
             $table->string('end_term_position')->nullable();
             $table->timestamps();
         });
