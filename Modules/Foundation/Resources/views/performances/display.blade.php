@@ -57,10 +57,22 @@
                                                 <td>{{ $performance->term }}</td>
                                                 <td>{{ $performance->mid_mean_score ? $performance->mid_mean_score . '%' : '--' }}</td>
                                                 <td>{{ $performance->mid_term_grade ?? '--' }}</td>
-                                                <td>{{ $performance->mid_term_position_number ?? '--' }} / {{ $performance->mid_term_position_total ?? '--' }}</td>
+                                                <td>
+                                                    @if($performance->mid_term_position)
+                                                        {{ explode(' out of ', $performance->mid_term_position)[0] }} / {{ explode(' out of ', $performance->mid_term_position)[1] }}
+                                                    @else
+                                                        --
+                                                    @endif
+                                                </td>
                                                 <td>{{ $performance->end_term_mean_score ? $performance->end_term_mean_score . '%' : '--' }}</td>
                                                 <td>{{ $performance->end_term_grade ?? '--' }}</td>
-                                                <td>{{ $performance->end_term_position_number ?? '--' }} / {{ $performance->end_term_position_total ?? '--' }}</td>
+                                                <td>
+                                                    @if($performance->end_term_position)
+                                                        {{ explode(' out of ', $performance->end_term_position)[0] }} / {{ explode(' out of ', $performance->end_term_position)[1] }}
+                                                    @else
+                                                        --
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -76,35 +88,52 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/searchpanes/2.0.0/js/dataTables.searchPanes.min.js"></script>
-    <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.0.0/js/dataTables.searchPanes.min.js"></script>   
+    
+    <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>   
+    
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>   
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>   
+    
     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-
+    
     <script>
-        $(document).ready(function() {
-            $('#performanceTable').DataTable({
-                dom: 'PBfrtip',
+   $(document).ready(function() {
+            var table = $('#performanceTable').DataTable({
+                dom: 'Pfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
-                searchPanes: {
-                    layout: 'columns-2',
-                    cascadePanes: true,
-                    viewTotal: true,
-                    columns: [0, 1]
-                },
-                columnDefs: [{
-                    searchPanes: {
-                        show: true,
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [0, 1] // Only enable search panes for columns 0 and 1
                     },
-                    targets: '_all'
-                }],
+                    {
+                        targets: '_all', // For other columns, make sure panes are not shown
+                        searchPanes: {
+                            show: false
+                        }
+                    }
+                ],
+                paging: true,
+                pagingType: "full_numbers",
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 pageLength: 10,
+                responsive: true,
+                processing: true
+            });
+
+            // Initialize search panes specifically for columns 0 and 1
+            table.searchPanes({
+                panes: [
+                    {columns: [0], show: true},
+                    {columns: [1], show: true}
+                ]
             });
         });
     </script>
