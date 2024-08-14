@@ -92,10 +92,10 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
                 searchPanes: {
-                    layout: 'columns-5',
+                    layout: 'columns-2',
                     cascadePanes: true,
                     viewTotal: true,
-                    columns: [0, 1, 2, 3, 4]
+                    columns: [0, 1]
                 },
                 columnDefs: [{
                     searchPanes: {
