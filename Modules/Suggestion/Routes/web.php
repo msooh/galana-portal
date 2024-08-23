@@ -15,11 +15,12 @@ use Modules\Suggestion\Http\Controllers\SuggestionController;
 Route::get('/thank-you', function () {
     return view('suggestion::thankyou');
 })->name('suggestion.thankyou');
-
+Route::prefix('suggestion')->group(function() {
+    Route::get('/', 'SuggestionController@index');
+});
 Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:Suggestions Module')->group(function() {
-        Route::prefix('suggestion')->group(function() {
-            Route::get('/', 'SuggestionController@index');
+        Route::prefix('suggestion')->group(function() {           
             Route::get('/dashboard', [SuggestionController::class, 'dashboard'])->name('suggestions.dashboard');
             Route::get('/history', [SuggestionController::class, 'history'])->name('suggestions.history');
             Route::post('/submit', [SuggestionController::class, 'store'])->name('suggestion.store');

@@ -26,11 +26,23 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        $surveys = Survey::with('station', 'signatures')->latest()->get();
-        $categories = Category::all();
-        $subcategories = Subcategory::all();
+        // Fetch surveys and their related data
+        $surveys = Survey::with(['station', 'creator', 'approver', 'responses.checklistItem.subcategory.category'])
+            ->latest()
+            ->get();
+            
 
-        return view('retail::surveys.index', compact('surveys', 'categories', 'subcategories'));
+        // Fetch categories and subcategories
+        $categories = Category::with('subcategories.checklists')->get();
+
+        // Define subcategories as a flat list or however you need them
+        $subcategories = Subcategory::with('checklists')->get(); // Adjust based on your structure
+
+        return view('retail::surveys.index', [
+            'surveys' => $surveys,
+            'categories' => $categories,
+            'subcategories' => $subcategories
+        ]);
     }
 
 
@@ -80,11 +92,10 @@ class SurveyController extends Controller
                 'signature_image' => 'required|string',
                 'comment' => 'nullable|string|max:1000',
                 'weight' => 'nullable|numeric',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
             ]);
-
-            // Get IP and location data
-            $ip = $request->ip();
-            $location = Location::get($ip);
+           
 
             // Create a new Survey
             $survey = new Survey([
@@ -92,13 +103,22 @@ class SurveyController extends Controller
                 'time' => now()->toTimeString(),
                 'station_id' => $validatedData['station_id'],
                 'created_by' => auth()->user()->id,
-                'latitude' => optional($location)->latitude,
-                'longitude' => optional($location)->longitude,
+                'latitude' => $validatedData['latitude'],
+                'longitude' => $validatedData['longitude'],
             ]);
             $survey->save();
 
             // Iterate through responses and save them
             foreach ($validatedData['responses'] as $checklistItemId => $response) {
+                $checklistItem = ChecklistItem::find($checklistItemId);
+
+                if ($checklistItem) {
+                    $subcategory = $checklistItem->subcategory;
+                    $category = $subcategory ? $subcategory->category : null;
+
+                    $surveyType = $category ? $category->name : 'Unknown'; // Set survey type based on the category name
+                }
+
                 $newResponse = new Response([
                     'checklist_item_id' => $checklistItemId,
                     'survey_id' => $survey->id,
@@ -139,6 +159,29 @@ class SurveyController extends Controller
             $totalMarks = ($totalYes + $totalNo) ? ($totalYes / ($totalYes + $totalNo)) * 100 : 0;
 
             $survey->update(['total_marks' => $totalMarks]);
+
+            // Fetch dealer and retail manager emails
+            $emails = User::whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Dealer', 'Retail Manager']);
+            })->whereHas('stations', function($query) use ($validatedData) {
+                $query->where('id', $validatedData['station_id']);
+            })->pluck('email');
+
+            // Ensure we have emails to send
+            if ($emails->isEmpty()) {
+                throw new \Exception('No valid recipients found for the survey report.');
+            }
+            
+            $surveyDetails = [
+                'type' => $surveyType,
+                'total_marks' => $totalMarks,
+                'surveyor' => auth()->user()->name,
+            ];
+    
+            $url = route('home'); 
+
+            // Send email to dealer and retail manager           
+            Mail::to($emails)->send(new SurveyReportMail($surveyDetails, $url));
 
             // Return success message
             return redirect()->back()->with('success', 'Survey submitted successfully!');

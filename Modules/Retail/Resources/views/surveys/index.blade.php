@@ -4,6 +4,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -19,6 +20,7 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th>#</th>
+                                            <th>Category</th>
                                             <th>Station</th>
                                             <th>Date</th>
                                             <th>Time</th>
@@ -31,9 +33,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($surveys as $survey)
+                                        @foreach($surveys as $survey)                                  
+
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                @php
+                                                    // Assuming each survey has a list of responses
+                                                    $firstResponse = $survey->responses->first();
+                                                    $categoryName = 'N/A'; // Default to N/A
+                                            
+                                                    if ($firstResponse && $firstResponse->checklistItem && $firstResponse->checklistItem->subcategory && $firstResponse->checklistItem->subcategory->category) {
+                                                        $categoryName = $firstResponse->checklistItem->subcategory->category->name;
+                                                    }
+                                                @endphp
+                                                <td>{{ $categoryName }}</td>
                                                 <td>{{ $survey->station->name }}</td>
                                                 <td>{{ $survey->date }}</td>
                                                 <td>{{ $survey->time }}</td>
@@ -48,6 +61,7 @@
                                                 <td>{{ $survey->comment }}</td>
                                                 <td>{{ $survey->creator->name }}</td>
                                                 <td>{{ $survey->approver->name ?? 'Null' }}</td>
+                                                
                                                 <td>
                                                     @if($survey->status == 'pending')
                                                         <div class="btn-group">
@@ -110,7 +124,9 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="accordion" id="responsesAccordion{{ $survey->id }}">
-                                                                @foreach($subcategories as $subcategory)
+                                                                @foreach($categories as $category)
+                                                                @foreach($category->subcategories as $subcategory)
+                                                                    @if($subcategory->checklists->isNotEmpty())
                                                                     <div class="card">
                                                                         <div class="card-header" id="heading{{ $subcategory->id }}" style="background-color: #3c4b64; color: white;">
                                                                             <h2 class="mb-0">
@@ -128,33 +144,35 @@
                                                                                         $response = $survey->responses->where('checklist_item_id', $item->id)->first();
                                                                                     @endphp
                                                                                     @if($response)
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-5"><strong>{{ $item->name }}</strong></div>
-                                                                                            <div class="col-md-3">{{ $response->response }}</div>
-                                                                                            <div class="col-md-4">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-7"><strong>{{ $item->name }}</strong></div>
+                                                                                        <div class="col-md-2">{{ $response->response }}</div>
+                                                                                        <div class="col-md-3">
+                                                                                            @if($category->type === 'weight')
+                                                                                                {{ $response->weight ?? 'No Weight' }}
+                                                                                            @elseif($category->type === 'attachment')
                                                                                                 @if($response->file_path)
                                                                                                     <button type="button" class="btn btn-link attachment-thumbnail" data-bs-toggle="modal" data-bs-target="#attachmentModal{{ $survey->id }}{{ $item->id }}">
                                                                                                         <img src="{{ asset('storage/' . $response->file_path) }}" class="img-thumbnail img-fluid" alt="Image Thumbnail" style="max-width: 80px; max-height: 80px;">
                                                                                                     </button>
-
                                                                                                 @else
                                                                                                     No Attachment
                                                                                                 @endif
-                                                                                            </div>
-
+                                                                                            @elseif($category->type === 'comment')
+                                                                                                {{ $response->comment ?? 'No Comment' }}
+                                                                                            @else
+                                                                                                {{ $response->response ?? 'N/A' }}
+                                                                                            @endif
                                                                                         </div>
-                                                                                    @else
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-5"><strong>{{ $item->name }}</strong></div>
-                                                                                            <div class="col-md-3">N/A</div>
-                                                                                            <div class="col-md-4">No Attachment</div>
-                                                                                        </div>
-                                                                                    @endif
+                                                                                    </div>
                                                                                     <hr>
+                                                                                @endif
                                                                                 @endforeach
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    @endif
+                                                                    @endforeach
                                                                 @endforeach
                                                             </div>
                                                             <hr>
@@ -188,6 +206,11 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
+                                                            <div class="row">                
+                                                                <!--Map Goes Here-->
+                                                                <div id="map{{ $survey->id }}" style="height: 400px; width: 100%;"></div>                                                            
+                                                            </div>
+                                                            
                                                         </div>                                           
 
                                                     <div class="modal-footer">
@@ -237,7 +260,6 @@
 @endforeach
 
 <style>
-    /* Custom CSS for accordion */
 /* Custom CSS for accordion */
 .card-header button {
     background-color: #3c4b64;
@@ -263,10 +285,15 @@
 
 
 </style>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!--<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>-->
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
 <script>
     $(document).ready(function() {
         $('#survey-history').DataTable();
@@ -291,4 +318,45 @@
     });
     @endif
 </script>
+<!-- Include the Google Maps JavaScript API -->
+
+<script>
+    function initMap() {
+    @foreach($surveys as $survey)
+        @if($survey->latitude && $survey->longitude)
+            var mapContainerId = 'map{{ $survey->id }}';
+            var mapOptions = {
+                zoom: 15,
+                center: { lat: {{ $survey->latitude }}, lng: {{ $survey->longitude }} },
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById(mapContainerId), mapOptions);
+
+            // Use standard Marker class
+            var marker = new google.maps.Marker({
+                position: { lat: {{ $survey->latitude }}, lng: {{ $survey->longitude }} },
+                map: map,
+                title: 'Survey Location'
+            });
+        @else
+            var mapOptions = {
+                zoom: 3,
+                center: { lat: 0, lng: 0 },
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: "Location data not available"
+            });
+
+            infoWindow.open(map);
+        @endif
+    @endforeach
+}
+
+</script>
+
 @endsection

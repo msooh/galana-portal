@@ -11,6 +11,8 @@
                     <form id="regForm" action="{{ route('surveys.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
                         <div class="form-group">
                             <label for="station_id">Select Station:</label>
                             <select class="form-select" id="station_id" name="station_id" required>
@@ -323,4 +325,24 @@
     });
     @endif
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                // Get the latitude and longitude from the position object
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                // Set the values in the hidden input fields
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+            }, function (error) {
+                console.error("Error getting location: " + error.message);
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    });
+</script>
+
 @endsection

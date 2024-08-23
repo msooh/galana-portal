@@ -3,6 +3,7 @@
 namespace Modules\Retail\Entities;
 
 use Modules\Setup\Entities\Station;
+use Modules\Retail\Entities\Category;
 use App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,4 +42,19 @@ class Survey extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    public function category()
+    {
+        return $this->hasManyThrough(
+            Category::class,             // Target model
+            Checklist::class,            // Intermediate model
+            'id',           // Foreign key on Checklist table (refers to Subcategory)
+            'id',                        // Foreign key on Category table
+            'id',                        // Local key on Survey table (relates to Response)
+            'sub_category_id'                // Local key on Checklist table (refers to Subcategory)
+        );
+    }
+    
+
+
 }

@@ -14,6 +14,6 @@ class Response extends Model
 
     public function checklistItem()
     {
-        return $this->belongsTo(Checklist::class);
+        return $this->belongsTo(Checklist::class, 'checklist_item_id');
     }
 }

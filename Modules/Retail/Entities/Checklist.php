@@ -22,8 +22,8 @@ class Checklist extends Model
         return $this->belongsTo(Subcategory::class, 'sub_category_id');
     }
 
-    public function category()
+    public function responses()
     {
-        return $this->subcategory->category(); 
+        return $this->hasMany(Response::class, 'checklist_item_id');
     }
 }
