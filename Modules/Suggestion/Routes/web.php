@@ -17,13 +17,13 @@ Route::get('/thank-you', function () {
 })->name('suggestion.thankyou');
 Route::prefix('suggestion')->group(function() {
     Route::get('/', 'SuggestionController@index');
+    Route::post('/submit', [SuggestionController::class, 'store'])->name('suggestion.store');
 });
 Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:Suggestions Module')->group(function() {
         Route::prefix('suggestion')->group(function() {           
             Route::get('/dashboard', [SuggestionController::class, 'dashboard'])->name('suggestions.dashboard');
-            Route::get('/history', [SuggestionController::class, 'history'])->name('suggestions.history');
-            Route::post('/submit', [SuggestionController::class, 'store'])->name('suggestion.store');
+            Route::get('/history', [SuggestionController::class, 'history'])->name('suggestions.history');            
         });
     });
 });
