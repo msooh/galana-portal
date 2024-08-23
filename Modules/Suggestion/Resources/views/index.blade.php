@@ -39,7 +39,7 @@
                                 <option value="">Select Suggestion Type</option>
                                 <option value="Business/Product Suggestion">Business/Product Suggestion</option>
                                 <option value="Process/Policy Suggestions">Process/Policy Suggestions</option>
-                                <option value="Complaint">Complaint</option>
+                                <option value="Complaint">Feedback</option>
                                 <option value="Other">Other</option>
                             </select>
                         </p>
@@ -57,6 +57,8 @@
                                 <option value="Lubricants">Lubricants</option>
                                 <option value="Consumer">Consumer</option>
                                 <option value="Engineering">Engineering</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Procurement">Procurement</option>
                                 <option value="Supply, Trading & Exports">Supply, Trading & Exports</option>
                             </select>
                         </p>
