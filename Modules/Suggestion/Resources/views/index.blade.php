@@ -39,7 +39,7 @@
                                 <option value="">Select Suggestion Type</option>
                                 <option value="Business/Product Suggestion">Business/Product Suggestion</option>
                                 <option value="Process/Policy Suggestions">Process/Policy Suggestions</option>
-                                <option value="Complaint">Feedback</option>
+                                <option value="Feedback">Feedback</option>
                                 <option value="Other">Other</option>
                             </select>
                         </p>
