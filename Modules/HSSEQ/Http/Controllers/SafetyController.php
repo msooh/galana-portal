@@ -151,9 +151,15 @@ class SafetyController extends Controller
         if ($request->hasFile('police_file')) {
             $policeFile = $request->file('police_file');
             $fileName = time() . '_' . $policeFile->getClientOriginalName();
-            $filePath = $policeFile->storeAs('police_files', $fileName, 'public');
-            $safety->police_file = $filePath;         
+            $filePath = 'police_files/' . $fileName;
+            
+            // Move the file to the public folder
+            $policeFile->move(public_path('police_files'), $fileName);
+    
+            // Save the file path to the database
+            $safety->police_file = $filePath;
         }
+       
     
         // Save the safety report
         $safety->save();   

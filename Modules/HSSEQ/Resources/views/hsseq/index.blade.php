@@ -204,11 +204,12 @@
                                                                         <th>Police File:</th>
                                                                         <td>
                                                                             @if ($report->police_file)
-                                                                                <a href="{{ asset('storage/' . $report->police_file) }}" target="_blank" class="btn btn-primary">View File</a>
+                                                                                <a href="{{ asset($report->police_file) }}" target="_blank" class="btn btn-primary">View File</a>
                                                                             @else
                                                                                 No file uploaded
                                                                             @endif
-                                                                        </td>                                                                    </tr>
+                                                                        </td>                                                                   
+                                                                    </tr>
                                                                     <tr>
                                                                         <th>Created By:</th>
                                                                         <td>{{ $report->createdBy->name ?? 'Null' }}</td>
