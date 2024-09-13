@@ -140,7 +140,7 @@
 </div>
 
 <!-- Bootstrap 4 JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -306,25 +306,9 @@
         }
     });
 
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: '{{ session('success') }}',
-        showConfirmButton: false,
-        timer: 2000
-    });
-    @endif
-
-    @if($errors->any())
-    Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: '{!! implode('\\n', $errors->all()) !!}',
-        confirmButtonText: 'OK'
-    });
-    @endif
+    
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         if (navigator.geolocation) {
@@ -342,6 +326,24 @@
         } else {
             console.error("Geolocation is not supported by this browser.");
         }
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        @endif
+
+        @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: '{!! implode('\\n', $errors->all()) !!}',
+            confirmButtonText: 'OK'
+        });
+        @endif
     });
 </script>
 

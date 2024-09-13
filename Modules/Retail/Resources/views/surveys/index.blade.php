@@ -191,19 +191,20 @@
                                                                 <div class="col-md-6">
                                                                     <h4>Signed By:</h4>
                                                                     @if($survey->signatures && $survey->signatures->isNotEmpty())
-                                                                        @foreach($survey->signatures as $signature)
-                                                                            <div class="signature">
-                                                                                @if($signature->role == 'Dealer')
-                                                                                    <p>{{ $signature->survey->station->dealer->name }} - Dealer</p>
-                                                                                @elseif($signature->role == 'Station Manager')
-                                                                                    <p>{{ $signature->survey->station->stationManager->name }} - Station Manager</p>
-                                                                                @endif
-                                                                                <img src="{{ asset('storage/' . $signature->signature_image) }}" class="img-thumbnail img-fluid" alt="Signature" style="max-width: 150px;">
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <p>No Signature</p>
-                                                                    @endif
+                                                                    @foreach($survey->signatures as $signature)
+                                                                        <div class="signature">
+                                                                            @if($signature->role == 'Dealer')
+                                                                                <p>{{ $signature->survey->station->dealer->name ?? '--' }} - Dealer</p>
+                                                                            @elseif($signature->role == 'Station Manager')
+                                                                                <p>{{ $signature->survey->station->stationManager->name ?? '--' }} - Station Manager</p>
+                                                                            @endif
+                                                                            <img src="{{ asset($signature->signature_image) }}" class="img-thumbnail img-fluid" alt="Signature" style="max-width: 150px;">
+                                                                        </div>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No Signature</p>
+                                                                @endif
+
                                                                 </div>
                                                             </div>
                                                             <div class="row">                
