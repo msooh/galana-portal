@@ -143,6 +143,8 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
 <script>
     var currentStep = 0;
     var formSteps = document.getElementsByClassName("form-step");
@@ -198,9 +200,10 @@
         }
 
         if (checkedCount !== checklistItemsCount) {
-            Swal.fire({                
+            Swal.fire({
                 title: 'Oops...',
-                text: 'Please select an option for each checklist item before proceeding.'
+                text: 'Please select an option for each checklist item before proceeding.',
+                icon: 'warning'
             });
             return false;
         }
@@ -229,16 +232,13 @@
     }
 
     function updateProgressBar(step) {
-        if (progressSteps.length === 0 || step < 0 || step >= progressSteps.length) {
-            return;
-        }
-
         for (var i = 0; i < progressSteps.length; i++) {
-            progressSteps[i].classList.remove("active");
+            progressSteps[i].className = progressSteps[i].className.replace(" active", "");
         }
-        progressSteps[step].classList.add("active");
+        progressSteps[step].className += " active";
     }
 
+    // Signature Pad Implementation
     var canvas = document.getElementById("signatureCanvas");
     var ctx = canvas.getContext("2d");
     var isDrawing = false;
@@ -272,11 +272,7 @@
     });
 
     function saveSignature() {
-        var signatureCanvas = document.getElementById("signatureCanvas");
-        var signatureInput = document.getElementById("signature");
-
-        // Check if canvas is empty
-        if (!ctx || ctx.getImageData(0, 0, signatureCanvas.width, signatureCanvas.height).data.reduce((a, b) => a + b) === 0) {
+        if (!ctx || ctx.getImageData(0, 0, canvas.width, canvas.height).data.reduce((a, b) => a + b) === 0) {
             Swal.fire({
                 title: 'Oops...',
                 text: 'Please provide a signature before proceeding.',
@@ -284,67 +280,43 @@
             });
             return false;
         }
-
-        // Get the data URL of the canvas
-        var dataURL = signatureCanvas.toDataURL();
-
-        // Set the value of the hidden input
-        signatureInput.value = dataURL;
-
+        var dataURL = canvas.toDataURL('image/png');
+        document.getElementById("signature").value = dataURL;
         return true;
     }
 
     function clearSignature() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        signatureInput.value = ''; // Clear the signature input value
+        document.getElementById("signature").value = '';
     }
 
-    var form = document.getElementById('regForm');
-    form.addEventListener('submit', function (event) {
+    document.getElementById('regForm').addEventListener('submit', function (event) {
         if (!saveSignature()) {
             event.preventDefault(); // Prevent form submission if validation fails
         }
     });
 
-    
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+    function initMap() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                // Get the latitude and longitude from the position object
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-
-                // Set the values in the hidden input fields
-                document.getElementById('latitude').value = latitude;
-                document.getElementById('longitude').value = longitude;
-            }, function (error) {
-                console.error("Error getting location: " + error.message);
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            }, function () {
+                Swal.fire({
+                    title: 'Location Access Denied',
+                    text: 'Please enable location access to continue with the survey.',
+                    icon: 'warning'
+                });
             });
         } else {
-            console.error("Geolocation is not supported by this browser.");
+            Swal.fire({
+                title: 'Geolocation Not Supported',
+                text: 'Your browser does not support geolocation.',
+                icon: 'error'
+            });
         }
-        @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2000
-        });
-        @endif
-
-        @if($errors->any())
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            text: '{!! implode('\\n', $errors->all()) !!}',
-            confirmButtonText: 'OK'
-        });
-        @endif
-    });
+    }
 </script>
+
 
 @endsection

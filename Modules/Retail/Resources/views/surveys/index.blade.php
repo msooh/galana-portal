@@ -287,37 +287,41 @@
 
 </style>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 <!--<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>-->
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
+@if(session()->has('success'))
+    <script>
+        console.log('Success message: {!! json_encode(session('success')) !!}');
+    </script>
+@endif
+
 <script>
     $(document).ready(function() {
-        $('#survey-history').DataTable();
+        $('#survey-history').DataTable();       
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        @endif
+        @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: '{!! implode('\\n', $errors->all()) !!}',
+            confirmButtonText: 'OK'
+        });
+        @endif
     });
-</script>
-<script>
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: '{{ session('success') }}',
-        showConfirmButton: false,
-        timer: 2000
-    });
-    @endif
-    @if($errors->any())
-    Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: '{!! implode('\\n', $errors->all()) !!}',
-        confirmButtonText: 'OK'
-    });
-    @endif
 </script>
 <!-- Include the Google Maps JavaScript API -->
 

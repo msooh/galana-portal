@@ -35,7 +35,7 @@ class SurveyReportMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Survey Report Mail',
+            subject: 'Survey Report Mail',           
         );
     }
 
@@ -57,15 +57,23 @@ class SurveyReportMail extends Mailable
      * @return array
      */
     public function attachments()
-    {
-        // Attach the survey report file
+{
+    $attachments = [];
+
+    // Ensure file_name is present and valid
+    if (isset($this->surveyDetails['file_name'])) {
         $surveyFilePath = storage_path('app/public/surveys/' . $this->surveyDetails['file_name']);
-        return [
-            'attachment' => [
+
+        if (file_exists($surveyFilePath)) {
+            $attachments[] = [
                 'file' => $surveyFilePath,
-                'as' => 'survey-report.pdf', 
+                'as' => 'survey-report.pdf',
                 'mime' => 'application/pdf',
-            ]
-        ];
+            ];
+        }
     }
+
+    return $attachments;
+}
+
 }

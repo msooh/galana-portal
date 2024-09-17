@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SurveyReportMail; 
 use Stevebauman\Location\Facades\Location;
 use Modules\Retail\Entities\Survey;
 use Modules\Retail\Entities\Subcategory;
@@ -167,12 +169,22 @@ class SurveyController extends Controller
 
         $survey->update(['total_marks' => $totalMarks]);
 
-        // Fetch dealer and retail manager emails
-        $emails = User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['Dealer', 'Retail Manager']);
-        })->whereHas('stations', function($query) use ($validatedData) {
-            $query->where('id', $validatedData['station_id']);
-        })->pluck('email');
+        // Fetch dealer emails      
+        $dealerEmails = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->join('roles', 'roles.id', '=', 'user_roles.role_id')
+            ->join('user_stations', 'users.id', '=', 'user_stations.user_id')
+            ->where('roles.name', 'Dealer')
+            ->where('user_stations.station_id', $validatedData['station_id'])
+            ->pluck('users.email');
+
+        // Fetch retail manager emails
+        $retailManagerEmails = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->join('roles', 'roles.id', '=', 'user_roles.role_id')
+            ->where('roles.name', 'Retail Manager')
+            ->pluck('users.email');
+
+        // Combine both email lists
+        $emails = $dealerEmails->merge($retailManagerEmails);
 
         if ($emails->isEmpty()) {
             throw new \Exception('No valid recipients found for the survey report.');
@@ -182,6 +194,7 @@ class SurveyController extends Controller
             'type' => $surveyType,
             'total_marks' => $totalMarks,
             'surveyor' => auth()->user()->name,
+            'file_name' => 'Survey Report.pdf',
         ];
 
         $url = route('home');
