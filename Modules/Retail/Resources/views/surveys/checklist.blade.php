@@ -82,7 +82,12 @@
                                                 </td>
                                                 @elseif($category->type === 'weight')
                                                 <td>
-                                                    <input type="number" name="responses[{{ $item->id }}][weight]" step="0.01">
+                                                    <select name="responses[{{ $item->id }}][weight]" class="form-select">
+                                                        <option value="">Select weight</option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                    </select>
                                                 </td>
                                                 @elseif($category->type === 'comment')
                                                 <td>

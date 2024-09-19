@@ -95,7 +95,7 @@ class SurveyController extends Controller
             'role' => 'required|string|in:Dealer,Station Manager',
             'signature_image' => 'required|string',
             'comment' => 'nullable|string|max:1000',
-            'weight' => 'nullable|numeric',
+            'weight' => 'required|numeric',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);

@@ -8,6 +8,7 @@ use App\Models\Role;
 use Modules\Setup\Entities\Station;
 use Modules\Retail\Entities\Category;
 use Modules\Setup\Entities\Dealer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -92,10 +93,43 @@ class RetailController extends Controller
         for ($month = 1; $month <= 12; $month++) {
             $surveyCounts[date('F', mktime(0, 0, 0, $month, 1))] = Survey::whereMonth('created_at', $month)->count();
         }
+
+        $dailySurveyReports = Survey::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy(DB::raw('DATE(created_at)')) 
+            ->pluck('count', 'date')
+            ->toArray();
+        $monthlySurveyReports = Survey::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
+        $yearlySurveyReports = Survey::selectRaw('YEAR(created_at) as year, COUNT(*) as count')
+            ->groupBy('year')
+            ->pluck('count', 'year')
+            ->toArray();
         $categories = Category::all();
         $dashboardData = $this->calculateDashboardData();
 
-        return view('retail::dashboard', compact('dashboardData', 'surveyCounts', 'categories'));
+        $tmVisits = Survey::select('created_by')
+            ->with('creator') 
+            ->selectRaw('count(*) as total_visits')
+            ->groupBy('created_by')
+            ->get();
+
+        
+        $labels = $tmVisits->map(function ($visit) {
+            return $visit->creator ? $visit->creator->name : 'Unknown';
+        });
+    
+        $data = $tmVisits->pluck('total_visits');
+    
+           
+        $surveyUserData = [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    
+
+        return view('retail::dashboard', compact('dashboardData', 'surveyCounts', 'categories', 'surveyUserData', 'dailySurveyReports', 'monthlySurveyReports', 'yearlySurveyReports'));
     }
 
     /**

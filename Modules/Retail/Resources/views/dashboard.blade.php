@@ -20,7 +20,7 @@
                                 </svg>
                                 @endif
                                 )</span></div>
-                        <div>Territory Managers</div>
+                        <div>Total TM's</div>
                     </div>
                     <!-- Dropdown button -->
                     <div class="dropdown">
@@ -55,7 +55,7 @@
                                 </svg>
                                 @endif
                                 )</span></div>
-                        <div>Stations</div>
+                        <div>Total Stations</div>
                     </div>
                     <!-- Dropdown button -->
                     <div class="dropdown">
@@ -90,7 +90,7 @@
                                 </svg>
                                 @endif
                                 )</span></div>
-                        <div>Dealers</div>
+                        <div>Total Dealers</div>
                     </div>
                     <!-- Dropdown button -->
                     <div class="dropdown">
@@ -125,7 +125,7 @@
                                 </svg>
                                 @endif
                                 )</span></div>
-                        <div>Surveys</div>
+                        <div>Total Surveys</div>
                     </div>
                     <!-- Dropdown button -->
                     <div class="dropdown">
@@ -151,27 +151,30 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <div>
-                    <h4 class="card-title mb-0">Surveys</h4>
-                    <div class="small text-medium-emphasis">January - July 2022</div>
+                    <h4 class="card-title mb-0">Total Surveys</h4>
+                    <div class="small text-medium-emphasis">January - December</div>
                 </div>
                 <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
-                        <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
-                        <label class="btn btn-outline-secondary"> Day</label>
-                        <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
-                        <label class="btn btn-outline-secondary active"> Month</label>
-                        <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
-                        <label class="btn btn-outline-secondary"> Year</label>
+                        <input class="btn-check" id="dayOption" type="radio" name="options" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="dayOption">Day</label>
+                        <input class="btn-check" id="monthOption" type="radio" name="options" autocomplete="off" checked="">
+                        <label class="btn btn-outline-secondary" for="monthOption">Month</label>
+                        <input class="btn-check" id="yearOption" type="radio" name="options" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="yearOption">Year</label>
                     </div>
-                    <button class="btn btn-primary" type="button">
+                    <button class="btn btn-primary" type="button" id="downloadButton">
                         <svg class="icon">
                             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
                         </svg>
                     </button>
                 </div>
             </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                <canvas class="chart" id="main-chart" height="300"></canvas>
+            <!--<div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                <canvas class="chart" id="surveyReportChart" height="300"></canvas>
+            </div>-->
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:250px;">
+                <canvas class="chart" id="surveyReportChart"></canvas>
             </div>
         </div>
         <div class="card-footer">
@@ -218,8 +221,193 @@
                 </div>
             </div>
         </div>
+  
+        
     </div>
+    <!--Survey Count By User -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="justify-content-between">
+                <div>
+                    <h4 class="card-title mb-0">Surveys by User</h4>
+                    <div class="c-chart-wrapper mt-3 mx-3" style="height:300px;">
+                        <canvas class="chart" id="surveyUserChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- /.card.mb-4-->
-    <script src="{{ asset('vendors/chart.js/js/chart.min.js') }}"></script>
-    <script src="{{ asset('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Data from the controller
+        const dashboardData = @json($dashboardData);
+        const dailySurveyReports = @json($dailySurveyReports);
+        const monthlySurveyReports = @json($monthlySurveyReports);
+        const yearlySurveyReports = @json($yearlySurveyReports);
+        const surveyUserData = @json($surveyUserData);
+       
+        const ctx = document.getElementById('surveyReportChart').getContext('2d');
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(monthlySurveyReports), 
+                datasets: [{
+                    label: 'Survey Reports',
+                    data: Object.values(monthlySurveyReports),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Event listeners for buttons
+        document.getElementById('dayOption').addEventListener('click', function () {
+            chart.data.labels = Object.keys(dailySurveyReports);
+            chart.data.datasets[0].data = Object.values(dailySurveyReports);
+            chart.update();
+        });
+
+        document.getElementById('monthOption').addEventListener('click', function () {
+            chart.data.labels = Object.keys(monthlySurveyReports);
+            chart.data.datasets[0].data = Object.values(monthlySurveyReports);
+            chart.update();
+        });
+
+        document.getElementById('yearOption').addEventListener('click', function () {
+            chart.data.labels = Object.keys(yearlySurveyReports);
+            chart.data.datasets[0].data = Object.values(yearlySurveyReports);
+            chart.update();
+        });
+
+        // Download button event listener
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            window.print();
+        });
+        const ctxSurveyUser = document.getElementById('surveyUserChart').getContext('2d');
+
+        const surveyUserChart = new Chart(ctxSurveyUser, {
+            type: 'bar', 
+            data: {
+                labels: surveyUserData.labels, 
+                datasets: [{
+                    label: 'Surveys by User',
+                    data: surveyUserData.data,
+                    backgroundColor: '#007bff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Users'
+                        },
+                        ticks: {
+                            autoSkip: false 
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        // Chart data for other charts
+        const chartsData = {
+            cardChart1: {
+                labels: ['TM Count'],
+                datasets: [{
+                    label: 'Territory Managers',
+                    data: [dashboardData.territoryManagersCount],
+                    backgroundColor: '#007bff',
+                }]
+            },
+            cardChart2: {
+                labels: ['Total Stations'],
+                datasets: [{
+                    label: 'Stations',
+                    data: [dashboardData.stationsCount],
+                    backgroundColor: '#28a745',
+                }]
+            },
+            cardChart3: {
+                labels: ['Total Dealers'],
+                datasets: [{
+                    label: 'Dealers',
+                    data: [dashboardData.dealersCount],
+                    backgroundColor: '#ffc107',
+                }]
+            },
+            cardChart4: {
+                labels: ['Total Surveys'],
+                datasets: [{
+                    label: 'Surveys',
+                    data: [dashboardData.surveyCount],
+                    backgroundColor: '#dc3545',
+                }]
+            },
+           
+        };
+
+        // Initialize charts
+        const ctx1 = document.getElementById('card-chart1').getContext('2d');
+        const ctx2 = document.getElementById('card-chart2').getContext('2d');
+        const ctx3 = document.getElementById('card-chart3').getContext('2d');
+        const ctx4 = document.getElementById('card-chart4').getContext('2d');
+        const ctx5 = document.getElementById('surveyReportChart').getContext('2d');
+        const ctx6 = document.getElementById('surveyUserChart').getContext('2d');
+
+        new Chart(ctx1, {
+            type: 'bar',
+            data: chartsData.cardChart1,
+            options: { responsive: true }
+        });
+
+        new Chart(ctx2, {
+            type: 'bar',
+            data: chartsData.cardChart2,
+            options: { responsive: true }
+        });
+
+        new Chart(ctx3, {
+            type: 'bar',
+            data: chartsData.cardChart3,
+            options: { responsive: true }
+        });
+
+        new Chart(ctx4, {
+            type: 'bar',
+            data: chartsData.cardChart4,
+            options: { responsive: true }
+        });
+
+        new Chart(ctx6, {
+            type: 'bar',
+            data: chartsData.surveyUserChart,
+            options: { responsive: true }
+        });
+    });
+
+    </script>
+        
+
 @endsection

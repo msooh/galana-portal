@@ -10,7 +10,6 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Survey History</div>
-
                     <div class="card-body">
                         @if($surveys->isEmpty())
                             <p>No surveys found.</p>
@@ -33,8 +32,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($surveys as $survey)                                  
-
+                                        @foreach($surveys as $survey)                                 
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 @php
@@ -60,8 +58,7 @@
                                                 </td>
                                                 <td>{{ $survey->comment }}</td>
                                                 <td>{{ $survey->creator->name }}</td>
-                                                <td>{{ $survey->approver->name ?? 'Null' }}</td>
-                                                
+                                                <td>{{ $survey->approver->name ?? 'Null' }}</td>                                                
                                                 <td>
                                                     @if($survey->status == 'pending')
                                                         <div class="btn-group">
@@ -75,7 +72,7 @@
                                                                         Approve
                                                                     </button>
                                                                 </li>
-                                                                <!-- Details Option (This is shown by default) -->
+                                                                <!-- Details Option (This is shown by default)-->
                                                                 <li>
                                                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#surveyModal{{ $survey->id }}">Details</a>
                                                                 </li>
@@ -284,22 +281,15 @@
     outline: none;
 }
 
-
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
 <!--<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>-->
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
-@if(session()->has('success'))
-    <script>
-        console.log('Success message: {!! json_encode(session('success')) !!}');
-    </script>
-@endif
 
 <script>
     $(document).ready(function() {
@@ -361,7 +351,5 @@
         @endif
     @endforeach
 }
-
 </script>
-
 @endsection
