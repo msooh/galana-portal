@@ -38,7 +38,7 @@
                                                 @php
                                                     // Assuming each survey has a list of responses
                                                     $firstResponse = $survey->responses->first();
-                                                    $categoryName = 'N/A'; // Default to N/A
+                                                    $categoryName = 'N/A'; 
                                             
                                                     if ($firstResponse && $firstResponse->checklistItem && $firstResponse->checklistItem->subcategory && $firstResponse->checklistItem->subcategory->category) {
                                                         $categoryName = $firstResponse->checklistItem->subcategory->category->name;
@@ -122,8 +122,16 @@
                                                         <div class="modal-body">
                                                             <div class="accordion" id="responsesAccordion{{ $survey->id }}">
                                                                 @foreach($categories as $category)
-                                                                @foreach($category->subcategories as $subcategory)
-                                                                    @if($subcategory->checklists->isNotEmpty())
+                                                                @php
+                                                                    // Check if category has subcategories with checklists that have responses for the current survey
+                                                                    $filteredSubcategories = $category->subcategories->filter(function($subcategory) use ($survey) {
+                                                                        return $subcategory->checklists->filter(function($item) use ($survey) {
+                                                                            return $survey->responses->where('checklist_item_id', $item->id)->isNotEmpty();
+                                                                        })->isNotEmpty();
+                                                                    });
+                                                                @endphp
+                                                                
+                                                                @foreach($filteredSubcategories as $subcategory)
                                                                     <div class="card">
                                                                         <div class="card-header" id="heading{{ $subcategory->id }}" style="background-color: #3c4b64; color: white;">
                                                                             <h2 class="mb-0">
@@ -150,7 +158,7 @@
                                                                                             @elseif($category->type === 'attachment')
                                                                                                 @if($response->file_path)
                                                                                                     <button type="button" class="btn btn-link attachment-thumbnail" data-bs-toggle="modal" data-bs-target="#attachmentModal{{ $survey->id }}{{ $item->id }}">
-                                                                                                        <img src="{{ asset('storage/' . $response->file_path) }}" class="img-thumbnail img-fluid" alt="Image Thumbnail" style="max-width: 80px; max-height: 80px;">
+                                                                                                        <img src="{{ asset($response->file_path) }}" class="img-thumbnail img-fluid" alt="Image Thumbnail" style="max-width: 80px; max-height: 80px;">
                                                                                                     </button>
                                                                                                 @else
                                                                                                     No Attachment
@@ -168,7 +176,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    @endif
+                                                                    
                                                                     @endforeach
                                                                 @endforeach
                                                             </div>
@@ -244,7 +252,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <img src="{{ asset('storage/' . $response->file_path) }}" class="img-fluid" alt="Image Preview">
+                                <img src="{{ asset($response->file_path) }}" class="img-fluid" alt="Image Preview">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -282,10 +290,11 @@
 }
 
 </style>
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 <!--<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>-->
 
@@ -293,7 +302,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#survey-history').DataTable();       
+        new DataTable('#survey-history');
         @if(session('success'))
         Swal.fire({
             icon: 'success',

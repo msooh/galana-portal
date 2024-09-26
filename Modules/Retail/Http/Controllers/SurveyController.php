@@ -91,11 +91,11 @@ class SurveyController extends Controller
             'station_id' => 'required|exists:stations,id',
             'responses.*.response' => 'required|string',
             'responses.*.comment' => 'nullable|string',
-            'attachments.*' => 'nullable|file|image|max:4096',
+            'responses.*.weight' => 'nullable|numeric|in:1,2,3',
+            'responses.*.file' => 'nullable|file|image|max:4096',            
             'role' => 'required|string|in:Dealer,Station Manager',
             'signature_image' => 'required|string',
-            'comment' => 'nullable|string|max:1000',
-            'weight' => 'nullable|numeric',
+            'comment' => 'nullable|string|max:1000',           
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
@@ -132,13 +132,13 @@ class SurveyController extends Controller
                 'survey_id' => $survey->id,
                 'response' => $response['response'],
                 'comment' => $response['comment'] ?? null,
+                'weight' => $response['weight'] ?? null,
             ]);
 
-            // Handle file attachment
-            if ($attachment = $request->file('attachments.' . $checklistItemId)) {
-                $publicPath = $attachment->store('attachments', 'public');
-                $newResponse->file_path = $publicPath;
-            }
+            if ($attachment = $request->file('responses.' . $checklistItemId . '.file')) {
+                $publicPath = $attachment->move(public_path('attachments'), $attachment->getClientOriginalName());
+                $newResponse->file_path = 'attachments/' . $attachment->getClientOriginalName();
+            }          
 
             $newResponse->save();
         }
