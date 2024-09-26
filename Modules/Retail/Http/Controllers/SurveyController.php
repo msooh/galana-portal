@@ -170,7 +170,7 @@ class SurveyController extends Controller
         $survey->update(['total_marks' => $totalMarks]);
 
         // Fetch dealer emails      
-        $dealerEmails = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+       /* $dealerEmails = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->join('roles', 'roles.id', '=', 'user_roles.role_id')
             ->join('user_stations', 'users.id', '=', 'user_stations.user_id')
             ->where('roles.name', 'Dealer')
@@ -184,7 +184,9 @@ class SurveyController extends Controller
             ->pluck('users.email');
 
         // Combine both email lists
-        $emails = $dealerEmails->merge($retailManagerEmails);
+        $emails = $dealerEmails->merge($retailManagerEmails);*/
+
+        $emails = collect(['faith.muthoni@galanaenergies.com']);
 
         if ($emails->isEmpty()) {
             throw new \Exception('No valid recipients found for the survey report.');
