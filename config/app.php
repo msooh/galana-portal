@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Retail Checklist'),
+    'name' => env('APP_NAME', 'Galana Portal'),
 
     /*
     |--------------------------------------------------------------------------

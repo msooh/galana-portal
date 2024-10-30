@@ -1,5 +1,5 @@
 <x-mail::message>
-# Survey Report
+# Retail Survey Report
 
 The following survey has been completed:
 

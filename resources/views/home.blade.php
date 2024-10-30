@@ -2,12 +2,17 @@
 
 @section('content')
 <div class="container">
+    <div class="text-center">                          
+        <img class="" width="300" height="auto" src="{{ asset('assets/img/New logo-01.png') }}" alt="Galana Logo">   
+        <h2 class="mb-5">Welcome to Your Portal Dashboard</h2>   
+        <p>Explore your authorized modules by clicking on the cards below. Each card navigates to a specific dashboard.</p>          
+    </div>
     <div class="row">
         <div class="container">
-            <div class="row pt-5">
+            <div class="d-flex flex-wrap pt-5 justify-content-start">
                 <!-- Retail Module Card -->               
                 @can('Retail Module')
-                <div class="col-md-2 col-sm-3">
+                <div class="module-card">
                     <a href="{{ route('retail.index') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -18,9 +23,9 @@
                     </a>
                 </div>
                 @endcan
-                <!-- Feedback Module Card -->
+                <!-- Finance Module Card -->
                 @can('Finance Module')
-                <div class="col-md-2 col-sm-6">
+                <div class="module-card">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -33,7 +38,7 @@
                 @endcan
                 <!-- Maintenance Module Card -->
                 @can('Maintenance Module')
-                <div class="col-md-2 col-sm-6">
+                <div class="module-card">
                     <a href="#" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -46,7 +51,7 @@
                 @endcan
                 <!-- HSSEQ Module Card -->
                 @can('HSSEQ Module')
-                <div class="col-md-2 col-sm-6">
+                <div class="module-card">
                     <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -57,9 +62,22 @@
                     </a>
                 </div>
                 @endcan
-                 <!-- Customer Feedback Module Card -->
-                 @can('Feedback Module')
-                <div class="col-md-2 col-sm-6">
+                <!--Land and leases Registry -->
+                @can('HSSEQ Module')
+                <div class="module-card">
+                    <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
+                        <div class="counter blue">
+                            <div class="counter-icon">
+                                <i class="fa fa-map-marked-alt"></i>
+                            </div>                       
+                            <h3>Land and Leases</h3>
+                        </div>
+                    </a>
+                </div>
+                @endcan
+                <!-- Customer Feedback Module Card -->
+                @can('Feedback Module')
+                <div class="module-card">
                     <a href="{{ route('feedback.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -70,9 +88,9 @@
                     </a>
                 </div>
                 @endcan
-                <!-- Feedback Module Card -->
+                <!-- Staff Suggestions Module Card -->
                 @can('Suggestions Module')
-                <div class="col-md-2 col-sm-6">
+                <div class="module-card">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">
                             <div class="counter-icon">
@@ -83,21 +101,21 @@
                     </a>
                 </div>
                 @endcan  
-                 <!-- Feedback Module Card -->
-                 @can('Suggestions Module')
-                 <div class="col-md-2 col-sm-6">
-                     <a href="{{ route('foundation.dashboard') }}" class="counter-link">
-                         <div class="counter blue">
-                             <div class="counter-icon">
-                                 <i class="fa fa-users"></i>
-                             </div>                       
-                             <h3>Galana Foundation</h3>
-                         </div>
-                     </a>
-                 </div>
-                 @endcan                
+                <!-- Galana Foundation Module Card -->
+                @can('Suggestions Module')
+                <div class="module-card">
+                    <a href="{{ route('foundation.dashboard') }}" class="counter-link">
+                        <div class="counter blue">
+                            <div class="counter-icon">
+                                <i class="fa fa-users"></i>
+                            </div>                       
+                            <h3>Galana Foundation</h3>
+                        </div>
+                    </a>
+                </div>
+                @endcan                
             </div>
-        </div>       
+        </div>      
     </div>
 </div>
 
