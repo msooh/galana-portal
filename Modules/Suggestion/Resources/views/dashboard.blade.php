@@ -9,22 +9,15 @@
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="fs-4 fw-semibold">2 <span class="fs-6 fw-normal">10%
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-bottom"></use>
-                            </svg>    
-                        </span></div>
+                        <div class="fs-4 fw-semibold">{{ $totalSuggestions }} 
+                            <span class="fs-6 fw-normal">{{ $thisMonthPercentage }}%
+                                <svg class="icon">
+                                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-bottom"></use>
+                                </svg>    
+                            </span>
+                        </div>
                         <div>Total Suggestions</div>
-                    </div>
-                    <!-- Dropdown button -->
-                    <div class="dropdown">
-                        <button class="btn btn-transparent  p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
                     <canvas class="chart" id="card-chart1" height="70"></canvas>
@@ -33,28 +26,20 @@
         </div>
         <!-- /.col-->
 
-        <!-- Completed Tasks Card -->
+        <!-- This Month Suggestions Card -->
         <div class="col-sm-6 col-lg-3">
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="fs-4 fw-semibold">2 <span class="fs-6 fw-normal">2%
-                               
+                        <div class="fs-4 fw-semibold">{{ $thisMonthSuggestions }} 
+                            <span class="fs-6 fw-normal">{{ $thisMonthPercentage }}%
                                 <svg class="icon">
                                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-bottom"></use>
                                 </svg>
-                               </span></div>
+                            </span>
+                        </div>
                         <div>This Month</div>
-                    </div>
-                    <!-- Dropdown button -->
-                    <div class="dropdown">
-                        <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
                     <canvas class="chart" id="card-chart2" height="70"></canvas>
@@ -63,28 +48,20 @@
         </div>
         <!-- /.col-->
 
-        <!-- Pending Tasks Card -->
+        <!-- Last Month Suggestions Card -->
         <div class="col-sm-6 col-lg-3">
             <div class="card mb-4">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="fs-4 fw-semibold">10 <span class="fs-6 fw-normal">10%
-                                
+                        <div class="fs-4 fw-semibold">{{ $lastMonthSuggestions }}
+                            <span class="fs-6 fw-normal">{{ $lastMonthPercentage }}%
                                 <svg class="icon">
                                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
                                 </svg>
-                               </span></div>
+                            </span>
+                        </div>
                         <div>Last Month</div>
-                    </div>
-                    <!-- Dropdown button -->
-                    <div class="dropdown">
-                        <button class="btn btn-transparent  p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="c-chart-wrapper mt-3" style="height:70px;">
                     <canvas class="chart" id="card-chart3" height="70"></canvas>
@@ -98,23 +75,14 @@
             <div class="card mb-4 ">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="fs-4 fw-semibold">20 <span class="fs-6 fw-normal">10%
+                        <div class="fs-4 fw-semibold">1 <span class="fs-6 fw-normal">100%
                                 
                                 <svg class="icon">
                                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-bottom"></use>
                                 </svg>
                               </span></div>
                         <div>Total Boxes</div>
-                    </div>
-                    <!-- Dropdown button -->
-                    <div class="dropdown">
-                        <button class="btn btn-transparent  p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
                     <canvas class="chart" id="card-chart4" height="70"></canvas>
@@ -161,76 +129,132 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <div>
-                    <h4 class="card-title mb-0">Staff Suggestions Reports</h4>
-                    <div class="small text-medium-emphasis">January - July 2022</div>
+                    <h4 class="card-title mb-0">Suggestions</h4>
+                    <div class="small text-medium-emphasis">January - December {{ date('Y') }}</div>
                 </div>
                 <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
-                        <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
-                        <label class="btn btn-outline-secondary"> Day</label>
-                        <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
-                        <label class="btn btn-outline-secondary active"> Month</label>
-                        <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
-                        <label class="btn btn-outline-secondary"> Year</label>
+                        <input class="btn-check" id="dayOption" type="radio" name="options" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="dayOption">Day</label>
+                        <input class="btn-check" id="monthOption" type="radio" name="options" autocomplete="off" checked="">
+                        <label class="btn btn-outline-secondary " for="monthOption">Month</label>
+                        <input class="btn-check" id="yearOption" type="radio" name="options" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="yearOption">Year</label>
                     </div>
-                    <button class="btn btn-primary" type="button">
-                        <svg class="icon">
-                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
-                        </svg>
-                    </button>
+                    <button class="btn btn-primary" type="button" id="downloadButton">
+                        <i class="fa fa-cloud-download"></i>
+                    </button>                    
                 </div>
+            </div>        
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:250px;">
+                <canvas class="chart" id="suggestionsChart" ></canvas>
             </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                <canvas class="chart" id="main-chart" height="300"></canvas>
-            </div>
-        </div>
+        </div>        
         <div class="card-footer">
             <div class="row row-cols-1 row-cols-md-5 text-center">
-                <!-- Total Reports -->
+                <!-- Total Suggestions -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">Total Suggestions</div>
-                    <div class="fw-semibold">100 Reports (10%)</div>
+                    <div class="fw-semibold">{{ $totalSuggestions }} Reports ({{ number_format($totalSuggestions > 0 ? 100 : 0, 2) }}%)</div>
                     <div class="progress progress-thin mt-2">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ number_format($totalSuggestions > 0 ? 100 : 0, 2) }}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
-                <!-- High Risk -->
+                </div>        
+                <!-- This Month Suggestions -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">This Month</div>
-                    <div class="fw-semibold">10 Suggestions Reports (20%)</div>
+                    <div class="fw-semibold">{{ $thisMonthSuggestions }} Suggestions ({{ number_format($thisMonthPercentage, 2) }}%)</div>
                     <div class="progress progress-thin mt-2">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ number_format($thisMonthPercentage, 2) }}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
-                <!-- Medium Risk -->
+                </div>        
+                <!-- Last Month Suggestions -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">Last Month</div>
-                    <div class="fw-semibold">30 Suggestion Reports (30%)</div>
+                    <div class="fw-semibold">{{ $lastMonthSuggestions }} Suggestions ({{ number_format($lastMonthPercentage, 2) }}%)</div>
                     <div class="progress progress-thin mt-2">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ number_format($lastMonthPercentage, 2) }}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
-                <!-- Low Risk Reports -->
+                </div>        
+                <!-- Departments (assuming each suggestion is linked to a department) -->
                 <div class="col mb-sm-2 mb-0">
                     <div class="text-medium-emphasis">Departments</div>
-                    <div class="fw-semibold"> (15%)</div>
+                    <div class="fw-semibold"> (11)</div>
                     <div class="progress progress-thin mt-2">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
-                <!-- Visit Rate -->
+                </div>        
+                <!-- Monthly Suggestion Rate -->
                 <div class="col mb-sm-2 mb-0">
-                    <div class="text-medium-emphasis">Monthy Suggestion Rate</div>
-                    <div class="fw-semibold">50%</div>
+                    <div class="text-medium-emphasis">Monthly Suggestion Rate</div>
+                    <div class="fw-semibold">{{ number_format(($thisMonthSuggestions / max($lastMonthSuggestions, 1)) * 100, 2) }}%</div>
                     <div class="progress progress-thin mt-2">
-                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ number_format(($thisMonthSuggestions / max($lastMonthSuggestions, 1)) * 100, 2) }}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
     <!-- /.card.mb-4-->
     <script src="{{ asset('vendors/chart.js/js/chart.min.js') }}"></script>
     <script src="{{ asset('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Data from the controller
+            const dailySuggestions = @json($dailySuggestions);
+            const monthlySuggestions = @json($monthlySuggestions);
+            const yearlySuggestions = @json($yearlySuggestions);
+        
+            const ctx = document.getElementById('suggestionsChart').getContext('2d');
+        
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(monthlySuggestions),
+                    datasets: [{
+                        label: 'Suggestions',
+                        data: Object.values(monthlySuggestions),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        
+            // Event listeners for buttons
+            document.getElementById('dayOption').addEventListener('click', function () {
+                chart.data.labels = Object.keys(dailySuggestions);
+                chart.data.datasets[0].data = Object.values(dailySuggestions);
+                chart.update();
+            });
+        
+            document.getElementById('monthOption').addEventListener('click', function () {
+                chart.data.labels = Object.keys(monthlySuggestions);
+                chart.data.datasets[0].data = Object.values(monthlySuggestions);
+                chart.update();
+            });
+        
+            document.getElementById('yearOption').addEventListener('click', function () {
+                chart.data.labels = Object.keys(yearlySuggestions);
+                chart.data.datasets[0].data = Object.values(yearlySuggestions);
+                chart.update();
+            });
+    
+            // Download button event listener
+            document.getElementById('downloadButton').addEventListener('click', function () {
+                window.print();
+            });
+        });
+    </script>
+    
 @endsection
 

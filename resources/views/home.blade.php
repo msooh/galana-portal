@@ -4,7 +4,7 @@
 <div class="container">
     <div class="text-center">                          
         <img class="" width="300" height="auto" src="{{ asset('assets/img/New logo-01.png') }}" alt="Galana Logo">   
-        <h2 class="mb-5">Welcome to Your Portal Dashboard</h2>   
+        <h2 class="mb-2">Welcome to Your Portal Dashboard</h2>   
         <p>Explore your authorized modules by clicking on the cards below. Each card navigates to a specific dashboard.</p>          
     </div>
     <div class="row">
@@ -62,6 +62,7 @@
                     </a>
                 </div>
                 @endcan
+                
                 <!--Land and leases Registry -->
                 @can('HSSEQ Module')
                 <div class="module-card">
@@ -71,6 +72,19 @@
                                 <i class="fa fa-map-marked-alt"></i>
                             </div>                       
                             <h3>Land and Leases</h3>
+                        </div>
+                    </a>
+                </div>
+                @endcan
+                <!--Legal Module -->
+                @can('HSSEQ Module')
+                <div class="module-card">
+                    <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
+                        <div class="counter blue">                       
+                            <div class="counter-icon"> 
+                                <i class="fa fa-gavel"></i>                                  
+                            </div>                       
+                            <h3>Legal Module</h3>
                         </div>
                     </a>
                 </div>
@@ -93,9 +107,9 @@
                 <div class="module-card">
                     <a href="{{ route('suggestions.dashboard') }}" class="counter-link">
                         <div class="counter blue">
-                            <div class="counter-icon">
+                            <div class="counter-icon">                                
                                 <i class="fa fa-lightbulb"></i>
-                            </div>                       
+                            </div>             
                             <h3>Staff Suggestions</h3>
                         </div>
                     </a>

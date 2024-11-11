@@ -23,8 +23,40 @@ class SuggestionController extends Controller
     public function dashboard()
     {
         $suggestions = Suggestion::orderBy('created_at', 'desc')->take(15)->get();
+        $totalSuggestions = Suggestion::count();
+        $thisMonthSuggestions = Suggestion::whereMonth('created_at', now()->month)->count();
+        $lastMonthSuggestions = Suggestion::whereMonth('created_at', now()->subMonth()->month)->count();
+
+        $thisMonthPercentage = $totalSuggestions > 0 ? ($thisMonthSuggestions / $totalSuggestions) * 100 : 0;
+        $lastMonthPercentage = $totalSuggestions > 0 ? ($lastMonthSuggestions / $totalSuggestions) * 100 : 0;
+
+        $dailySuggestions = Suggestion::whereMonth('created_at', now()->month)
+            ->selectRaw('DAY(created_at) as day, COUNT(*) as count')
+            ->groupBy('day')
+            ->pluck('count', 'day');
+
+        // Aggregate monthly suggestions for the current year
+        $monthlySuggestions = Suggestion::whereYear('created_at', now()->year)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        // Aggregate yearly suggestions for all years
+        $yearlySuggestions = Suggestion::selectRaw('YEAR(created_at) as year, COUNT(*) as count')
+            ->groupBy('year')
+            ->pluck('count', 'year');
        
-        return view('suggestion::dashboard', compact('suggestions'));
+            return view('suggestion::dashboard', compact(
+                'totalSuggestions',
+                'thisMonthSuggestions',
+                'lastMonthSuggestions',
+                'thisMonthPercentage',
+                'lastMonthPercentage',
+                'suggestions',
+                'dailySuggestions',
+                'monthlySuggestions',
+                'yearlySuggestions'
+            ));
     }
 
     public function history()
