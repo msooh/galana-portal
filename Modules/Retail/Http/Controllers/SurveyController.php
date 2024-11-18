@@ -204,6 +204,7 @@ class SurveyController extends Controller
 
             // Generate PDF for the survey report
             $pdf = Pdf::loadView('emails.survey.pdf', compact('survey', 'surveyDetails')); 
+            $pdfContent = $pdf->output();
     
             // Send email to dealer and retail manager           
             Mail::to($emails)->cc([$territoryManagerEmail, $dealerEmail])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
