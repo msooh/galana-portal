@@ -15,18 +15,18 @@ class SurveyReportMail extends Mailable
 
     public $surveyDetails;  
     public $url;
-    public $pdf;
+    public $pdfContent;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($surveyDetails, $url, $pdf)
+    public function __construct($surveyDetails, $url, $pdfContent)
     {
         $this->surveyDetails = $surveyDetails;
         $this->url = $url;
-        $this->pdf = $pdf;
+        $this->pdfContent = $pdfContent;
     }
 
     /**
@@ -34,44 +34,53 @@ class SurveyReportMail extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    /*public function envelope()
     {
         return new Envelope(
             subject: 'Survey Report Mail',           
         );
-    }
+    }*/
 
     /**
      * Get the message content definition.
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    /*public function content()
     {
         return new Content(
             markdown: 'emails.survey.report',
         );
-    }
+    }*/
 
     /**
      * Get the attachments for the message.
      *
      * @return array
      */
-    public function attachments()
+    /*public function attachments()
     {
         $attachments = [];
 
         // Check if PDF object is available and attach it
         if ($this->pdf) {
             $attachments[] = [
-                'file' => $this->pdf->output(), // Get the PDF output as binary data
+                'file' => $this->pdfContent->output(), // Get the PDF output as binary data
                 'as' => 'survey-report.pdf',
                 'mime' => 'application/pdf',
             ];
         }
 
         return $attachments;
+    }*/
+
+    public function build()
+    {
+        return $this->subject('Survey Report')
+                    ->view('emails.survey.report')
+                    ->attachData($this->pdfContent, 'survey-report.pdf', [
+                        'mime' => 'application/pdf',
+                    ]);
     }
 
 }

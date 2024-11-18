@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SurveyReportMail; 
 use Stevebauman\Location\Facades\Location;
@@ -203,10 +203,10 @@ class SurveyController extends Controller
             $url = route('home');
 
             // Generate PDF for the survey report
-            $pdf = PDF::loadView('emails.survey.pdf', compact('survey', 'surveyDetails')); 
+            $pdf = Pdf::loadView('emails.survey.pdf', compact('survey', 'surveyDetails')); 
     
             // Send email to dealer and retail manager           
-            Mail::to($emails)->cc([$territoryManagerEmail, $dealerEmail])->send(new SurveyReportMail($surveyDetails, $url, $pdf));
+            Mail::to($emails)->cc([$territoryManagerEmail, $dealerEmail])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
             // Return success message
             return redirect()->route('surveys.index')->with('success', 'Survey submitted successfully!');
             } catch (\Exception $e) {
