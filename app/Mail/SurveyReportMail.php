@@ -15,16 +15,18 @@ class SurveyReportMail extends Mailable
 
     public $surveyDetails;  
     public $url;
+    public $pdf;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($surveyDetails, $url)
+    public function __construct($surveyDetails, $url, $pdf)
     {
         $this->surveyDetails = $surveyDetails;
         $this->url = $url;
+        $this->pdf = $pdf;
     }
 
     /**
@@ -57,23 +59,19 @@ class SurveyReportMail extends Mailable
      * @return array
      */
     public function attachments()
-{
-    $attachments = [];
+    {
+        $attachments = [];
 
-    // Ensure file_name is present and valid
-    if (isset($this->surveyDetails['file_name'])) {
-        $surveyFilePath = storage_path('app/public/surveys/' . $this->surveyDetails['file_name']);
-
-        if (file_exists($surveyFilePath)) {
+        // Check if PDF object is available and attach it
+        if ($this->pdf) {
             $attachments[] = [
-                'file' => $surveyFilePath,
+                'file' => $this->pdf->output(), // Get the PDF output as binary data
                 'as' => 'survey-report.pdf',
                 'mime' => 'application/pdf',
             ];
         }
-    }
 
-    return $attachments;
-}
+        return $attachments;
+    }
 
 }
