@@ -64,7 +64,7 @@ class SurveyController extends Controller
 
         $user = Auth::user();
         
-        if ($user->hasRole('Admin') || $user->hasRole('Retail Manager')) {
+        if ($user->hasRole('Admin') || $user->hasRole('Retail Manager') || $user->hasRole('Head of Retail')) {
             // Show all stations for admin and retail manager
             $stations = Station::all();
         } elseif ($user->hasRole('Territory Manager (TM)')) {
@@ -207,7 +207,12 @@ class SurveyController extends Controller
             $pdfContent = $pdf->output();
     
             // Send email to dealer and retail manager           
-            Mail::to($emails)->cc([$territoryManagerEmail, $dealerEmail])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
+            Mail::to($emails)->cc([
+                $territoryManagerEmail, 
+                $dealerEmail, 
+                'john.muchunu@galanaenergies.com', 
+                'julius.peter@galanaenergies.com'
+                ])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
             // Return success message
             return redirect()->route('surveys.index')->with('success', 'Survey submitted successfully!');
             } catch (\Exception $e) {
