@@ -52,7 +52,7 @@
     <!-- Header Section -->
     <div class="header">
         <!-- Logo on the left -->
-        <img src="{{ asset('path-to-your-logo/logo.png') }}" alt="Company Logo">
+        <img src="{{ asset('assets/img/New logo-01.png') }}" alt="Company Logo">
         <!-- Station Details on the right -->
         <div class="details">
             <p><strong>Station:</strong> {{ $survey->station->name }}</p>
