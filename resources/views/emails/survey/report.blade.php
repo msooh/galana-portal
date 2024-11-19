@@ -20,7 +20,7 @@
         }
         h1 {
             font-size: 24px;
-            color: #0056b3;
+            color: #283c98;
             margin-bottom: 20px;
         }
         p {
@@ -43,7 +43,7 @@
         }
         a.button {
             display: inline-block;
-            background-color: #0056b3;
+            background-color: #283c98;
             color: #fff;
             padding: 12px 20px;
             text-decoration: none;
