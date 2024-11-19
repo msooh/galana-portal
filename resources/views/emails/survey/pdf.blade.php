@@ -8,6 +8,30 @@
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-height: 60px;
+        }
+        .details {
+            text-align: right;
+            font-size: 12px;
+            color: #555;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .survey-info {
+            margin-bottom: 30px;
         }
         table {
             width: 100%;
@@ -22,24 +46,28 @@
         th {
             background-color: #f2f2f2;
         }
-        h1 {
-            text-align: center;
-        }
-        .survey-info {
-            margin-bottom: 30px;
-        }
     </style>
 </head>
 <body>
-    <h1>Survey Report - {{ $survey->station->name }}</h1>
-    
+    <!-- Header Section -->
+    <div class="header">
+        <!-- Logo on the left -->
+        <img src="{{ asset('path-to-your-logo/logo.png') }}" alt="Company Logo">
+        <!-- Station Details on the right -->
+        <div class="details">
+            <p><strong>Station:</strong> {{ $survey->station->name }}</p>
+            <p><strong>Date:</strong> {{ $survey->date }}</p>
+            <p><strong>Time:</strong> {{ $survey->time }}</p>
+        </div>
+    </div>
+
+    <!-- Survey Title -->
+    <h1>Survey Report</h1>
+
     <!-- Survey Details -->
     <div class="survey-info">
-        <p><strong>Category:</strong> {{ $survey->responses->first()->checklistItem->subcategory->category->name ?? 'N/A' }}</p>
-        <p><strong>Station:</strong> {{ $survey->station->name }}</p>
-        <p><strong>Date:</strong> {{ $survey->date }}</p>
-        <p><strong>Time:</strong> {{ $survey->time }}</p>
-        <p><strong>Total Marks:</strong> {{ $survey->total_marks }}%</p>        
+        <p><strong>Checklist:</strong> {{ $survey->responses->first()->checklistItem->subcategory->category->name ?? 'N/A' }}</p>
+        <p><strong>Total Marks:</strong> {{ $survey->total_marks }}%</p>
         <p><strong>Comment:</strong> {{ $survey->comment }}</p>
         <p><strong>Created By:</strong> {{ $survey->creator->name }}</p>        
     </div>
@@ -49,7 +77,7 @@
     <table>
         <thead>
             <tr>
-                <th>Subcategory</th>
+                <th>Category</th>
                 <th>Checklist Item</th>
                 <th>Response</th>
                 <th>Weight</th>
