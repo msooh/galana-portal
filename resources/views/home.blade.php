@@ -64,7 +64,7 @@
                 @endcan
                 
                 <!--Land and leases Registry -->
-                @can('HSSEQ Module')
+                @can('Finance Module')
                 <div class="module-card">
                     <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
                         <div class="counter blue">
@@ -77,7 +77,7 @@
                 </div>
                 @endcan
                 <!--Legal Module -->
-                @can('HSSEQ Module')
+                @can('Finance Module')
                 <div class="module-card">
                     <a href="{{ route('hsseq.dashboard') }}" class="counter-link">
                         <div class="counter blue">                       
