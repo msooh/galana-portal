@@ -67,7 +67,7 @@
     <!-- Survey Details -->
     <div class="survey-info">
         <p><strong>Checklist:</strong> {{ $survey->responses->first()->checklistItem->subcategory->category->name ?? 'N/A' }}</p>
-        <p><strong>Total Marks:</strong> {{ $survey->total_marks }}%</p>
+        <p><strong>Total Marks:</strong> {{ number_format($survey->total_marks, 2) }}%</p>
         <p><strong>Comment:</strong> {{ $survey->comment }}</p>
         <p><strong>Created By:</strong> {{ $survey->creator->name }}</p>        
     </div>
@@ -77,6 +77,7 @@
     <table>
         <thead>
             <tr>
+                <th>#</th>
                 <th>Category</th>
                 <th>Checklist Item</th>
                 <th>Response</th>
@@ -91,6 +92,7 @@
                     $item = $response->checklistItem;
                 @endphp
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->subcategory->name ?? 'N/A' }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $response->response }}</td>

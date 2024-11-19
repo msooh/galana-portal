@@ -65,7 +65,7 @@
             </tr>
             <tr>
                 <td class="header-cell">Total Marks:</td>
-                <td>{{ $surveyDetails['total_marks'] }}</td>
+                <td>{{ number_format($surveyDetails['total_marks'], 2) }}%</td>
             </tr>
             <tr>
                 <td class="header-cell">Surveyor:</td>

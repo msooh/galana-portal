@@ -151,7 +151,7 @@
                                                                                     @if($response)
                                                                                     <div class="row">
                                                                                         <div class="col-md-7"><strong>{{ $item->name }}</strong></div>
-                                                                                        <div class="col-md-2">{{ $response->response }}</div>
+                                                                                        <div class="col-md-2">{{ $response->response ?? 'N/A' }}</div>
                                                                                         <div class="col-md-3">
                                                                                             @if($category->type === 'weight')
                                                                                                 {{ $response->weight ?? 'No Weight' }}
@@ -164,9 +164,7 @@
                                                                                                     No Attachment
                                                                                                 @endif
                                                                                             @elseif($category->type === 'comment')
-                                                                                                {{ $response->comment ?? 'No Comment' }}
-                                                                                            @else
-                                                                                                {{ $response->response ?? 'N/A' }}
+                                                                                                {{ $response->comment ?? 'No Comment' }}                                                                                           
                                                                                             @endif
                                                                                         </div>
                                                                                     </div>
