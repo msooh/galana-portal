@@ -35,6 +35,10 @@
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}"></use>
                     </svg> List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('roles.create') }}" target="_top">
+                    <svg class="nav-icon">
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-briefcase') }}"></use>
+                    </svg>Roles</a></li>          
                 <li class="nav-item"><a class="nav-link" href="{{ route('permissions.create') }}" target="_top">
                     <svg class="nav-icon">
                         <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>

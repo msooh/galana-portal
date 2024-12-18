@@ -14225,3 +14225,13 @@ a{
 }
 
 
+/*Signature Canvas -- Retail Module Creating a survey (Retail::checklist.blade.php)*/
+
+#signatureCanvas {
+  width: 100%;
+  height: auto;
+  border: 1px solid black;
+  touch-action: none; /* For touch devices */
+  display: block;
+  max-width: 100%; /* No overflow */
+}

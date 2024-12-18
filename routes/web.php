@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use Modules\Foundation\Http\Controllers\PerformanceController;
 
@@ -59,5 +60,11 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::middleware('permission:Activate Users')->group(function () {
         Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
+    });
+    // Role management routes
+    Route::middleware('permission:Manage Roles')->group(function () {
+        Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');       
+        Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
     });
 });
