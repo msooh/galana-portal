@@ -64,8 +64,8 @@ class SurveyController extends Controller
 
         $user = Auth::user();
         
-        if ($user->hasRole('Admin') || $user->hasRole('Retail Manager') || $user->hasRole('Head of Retail')) {
-            // Show all stations for admin and retail manager
+        if ($user->hasRole('Admin') || $user->hasRole('Retail Manager') || $user->hasRole('Team Coach') || $user->hasRole('Head of Retail')) {
+            // Show all stations for admin , Team Coach, Head of Retail, and retail manager
             $stations = Station::all();
         } elseif ($user->hasRole('Territory Manager (TM)')) {
             // Show only stations associated with the current user for territory manager
