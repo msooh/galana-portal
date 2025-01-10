@@ -14229,9 +14229,10 @@ a{
 
 #signatureCanvas {
   width: 100%;
-  height: auto;
+  height: 250px;
   border: 1px solid black;
   touch-action: none; /* For touch devices */
   display: block;
   max-width: 100%; /* No overflow */
+  pointer-events: auto;
 }

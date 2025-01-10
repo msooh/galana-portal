@@ -6,7 +6,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Create New Survey for {{ $category->name }}</div>
-
                 <div class="card-body">
                     <form id="regForm" action="{{ route('surveys.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -121,7 +120,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div style="overflow:auto;">
                             <div style="float:right;">
                                 <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -161,86 +159,86 @@
     showStep(currentStep); // Show the first step
 
     function showStep(step) {
-        if (formSteps.length === 0 || step < 0 || step >= formSteps.length) {
-            return;
-        }
+    if (formSteps.length === 0 || step < 0 || step >= formSteps.length) {
+        return;
+    }
 
-        for (var i = 0; i < formSteps.length; i++) {
-            formSteps[i].style.display = "none";
-        }
-        formSteps[step].style.display = "block";
-        updateButtons(step);
-        updateProgressBar(step);
+    for (var i = 0; i < formSteps.length; i++) {
+        formSteps[i].style.display = "none";
+    }
+    formSteps[step].style.display = "block";
+    updateButtons(step);
+    updateProgressBar(step);
     }
 
     function nextPrev(step) {
-        if (step === 1 && !validateStep(currentStep)) {
-            return false;
-        }
-        currentStep += step;
-        showStep(currentStep);
+    if (step === 1 && !validateStep(currentStep)) {
+        return false;
+    }
+    currentStep += step;
+    showStep(currentStep);
 
-        if (currentStep === formSteps.length - 1) {
-            nextButton.style.display = "none";
-            submitButton.style.display = "inline";
-        } else {
-            nextButton.style.display = "inline";
-            submitButton.style.display = "none";
-        }
+    if (currentStep === formSteps.length - 1) {
+        nextButton.style.display = "none";
+        submitButton.style.display = "inline";
+    } else {
+        nextButton.style.display = "inline";
+        submitButton.style.display = "none";
+    }
     }
 
     function validateStep(step) {
-        if (formSteps.length === 0 || step < 0 || step >= formSteps.length) {
-            return false;
+    if (formSteps.length === 0 || step < 0 || step >= formSteps.length) {
+        return false;
+    }
+
+    var radios = formSteps[step].querySelectorAll('input[type="radio"]');
+    var checkedCount = 0;
+    var checklistItemsCount = radios.length / 3; // Each item has 3 radio buttons
+
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+        checkedCount++;
         }
+    }
 
-        var radios = formSteps[step].querySelectorAll('input[type="radio"]');
-        var checkedCount = 0;
-        var checklistItemsCount = radios.length / 3; // Each item has 3 radio buttons
+    if (checkedCount !== checklistItemsCount) {
+        Swal.fire({
+        title: 'Oops...',
+        text: 'Please select an option for each checklist item before proceeding.',
+        icon: 'warning'
+        });
+        return false;
+    }
 
-        for (var i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                checkedCount++;
-            }
-        }
-
-        if (checkedCount !== checklistItemsCount) {
-            Swal.fire({
-                title: 'Oops...',
-                text: 'Please select an option for each checklist item before proceeding.',
-                icon: 'warning'
-            });
-            return false;
-        }
-
-        return true;
+    return true;
     }
 
     function updateButtons(step) {
-        if (!prevButton || !nextButton || !submitButton) {
-            return;
-        }
+    if (!prevButton || !nextButton || !submitButton) {
+        return;
+    }
 
-        if (step === 0) {
-            prevButton.style.display = "none";
-        } else {
-            prevButton.style.display = "inline";
-        }
+    if (step === 0) {
+        prevButton.style.display = "none";
+    } else {
+        prevButton.style.display = "inline";
+    }
 
-        if (step === formSteps.length - 1) {
-            nextButton.style.display = "none"; // Hide Next button on last step
-            submitButton.style.display = "inline"; // Show Submit button on last step
-        } else {
-            nextButton.style.display = "inline";
-            submitButton.style.display = "none";
-        }
+    if (step === formSteps.length - 1) {
+        nextButton.style.display = "none"; // Hide Next button on last step
+        submitButton.style.display = "inline"; // Show Submit button on last step
+    } else {
+        nextButton.style.display = "inline";
+        submitButton.style.display = "none";
+    }
     }
 
     function updateProgressBar(step) {
-        for (var i = 0; i < progressSteps.length; i++) {
-            progressSteps[i].className = progressSteps[i].className.replace(" active", "");
-        }
-        progressSteps[step].className += " active";
+    for (var i = 0; i < progressSteps.length; i++) {
+        progressSteps[i].className = progressSteps[i].className.replace(" active", "");
+    }
+    progressSteps[step].className += " active";
     }
 
     // Signature Pad Implementation
@@ -250,20 +248,65 @@
     var lastX = 0;
     var lastY = 0;
 
+    // Calculate canvas bounds for precise positioning
+    function getCanvasOffset() {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: rect.left,
+            y: rect.top,
+            scaleX: canvas.width / rect.width,
+            scaleY: canvas.height / rect.height
+        };
+    }
+
+    canvas.addEventListener("touchstart", function (e) {
+        isDrawing = true;
+        const offset = getCanvasOffset();
+        lastX = (e.touches[0].clientX - offset.x) * offset.scaleX;
+        lastY = (e.touches[0].clientY - offset.y) * offset.scaleY;
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, 2, 0, 2 * Math.PI);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    });
+
+    canvas.addEventListener("touchmove", function (e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const offset = getCanvasOffset();
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        lastX = (e.touches[0].clientX - offset.x) * offset.scaleX;
+        lastY = (e.touches[0].clientY - offset.y) * offset.scaleY;
+        ctx.lineTo(lastX, lastY);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+
+    canvas.addEventListener("touchend", function () {
+        isDrawing = false;
+        saveSignature();
+    });
+
     canvas.addEventListener("mousedown", function (e) {
         isDrawing = true;
-        [lastX, lastY] = [e.offsetX, e.offsetY];
+        const offset = getCanvasOffset();
+        lastX = (e.clientX - offset.x) * offset.scaleX;
+        lastY = (e.clientY - offset.y) * offset.scaleY;
     });
 
     canvas.addEventListener("mousemove", function (e) {
         if (!isDrawing) return;
+        const offset = getCanvasOffset();
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
-        ctx.lineTo(e.offsetX, e.offsetY);
+        lastX = (e.clientX - offset.x) * offset.scaleX;
+        lastY = (e.clientY - offset.y) * offset.scaleY;
+        ctx.lineTo(lastX, lastY);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
         ctx.stroke();
-        [lastX, lastY] = [e.offsetX, e.offsetY];
     });
 
     canvas.addEventListener("mouseup", function () {
@@ -277,51 +320,50 @@
     });
 
     function saveSignature() {
-        if (!ctx || ctx.getImageData(0, 0, canvas.width, canvas.height).data.reduce((a, b) => a + b) === 0) {
-            Swal.fire({
-                title: 'Oops...',
-                text: 'Please provide a signature before proceeding.',
-                icon: 'error'
-            });
-            return false;
-        }
-        var dataURL = canvas.toDataURL('image/png');
-        document.getElementById("signature").value = dataURL;
-        return true;
+    if (!ctx || ctx.getImageData(0, 0, canvas.width, canvas.height).data.reduce((a, b) => a + b) === 0) {
+        Swal.fire({
+        title: 'Oops...',
+        text: 'Please provide a signature before proceeding.',
+        icon: 'error'
+        });
+        return false;
+    }
+    var dataURL = canvas.toDataURL('image/png');
+    document.getElementById("signature").value = dataURL;
+    return true;
     }
 
     function clearSignature() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById("signature").value = '';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("signature").value = '';
     }
 
     document.getElementById('regForm').addEventListener('submit', function (event) {
-        if (!saveSignature()) {
-            event.preventDefault(); // Prevent form submission if validation fails
-        }
+    if (!saveSignature()) {
+        event.preventDefault(); // Prevent form submission if validation fails
+    }
     });
 
     function initMap() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-            }, function () {
-                Swal.fire({
-                    title: 'Location Access Denied',
-                    text: 'Please enable location access to continue with the survey.',
-                    icon: 'warning'
-                });
-            });
-        } else {
-            Swal.fire({
-                title: 'Geolocation Not Supported',
-                text: 'Your browser does not support geolocation.',
-                icon: 'error'
-            });
-        }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+        document.getElementById('latitude').value = position.coords.latitude;
+        document.getElementById('longitude').value = position.coords.longitude;
+        }, function () {
+        Swal.fire({
+            title: 'Location Access Denied',
+            text: 'Please enable location access to continue with the survey.',
+            icon: 'warning'
+        });
+        });
+    } else {
+        Swal.fire({
+        title: 'Geolocation Not Supported',
+        text: 'Your browser does not support geolocation.',
+        icon: 'error'
+        });
     }
-</script>
-
-
+    }
+</script> 
 @endsection
+

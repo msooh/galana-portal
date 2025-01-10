@@ -100,6 +100,8 @@ class SurveyController extends Controller
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric',
             ]);
+
+            dd($validatedData);
     
             // Create a new Survey
             $survey = new Survey([
@@ -211,6 +213,7 @@ class SurveyController extends Controller
                 $territoryManagerEmail, 
                 $dealerEmail, 
                 'john.muchunu@galanaenergies.com', 
+                'faith.muthoni@galanaenergies.com',
                 'julius.peter@galanaenergies.com'
                 ])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
             // Return success message
