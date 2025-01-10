@@ -101,7 +101,6 @@ class SurveyController extends Controller
                 'longitude' => 'required|numeric',
             ]);
 
-            dd($validatedData);
     
             // Create a new Survey
             $survey = new Survey([
