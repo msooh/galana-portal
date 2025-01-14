@@ -67,17 +67,21 @@
                                                             </button>
                                                             <ul class="dropdown-menu">
                                                                 <!-- Approve Option -->
-                                                                <li>
-                                                                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#approveModal{{ $survey->id }}">
-                                                                        Approve
-                                                                    </button>
-                                                                </li>
+                                                                @can('Approve Surveys')
+                                                                    <li>
+                                                                        <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#approveModal{{ $survey->id }}">
+                                                                            Approve
+                                                                        </button>
+                                                                    </li>
+                                                                @endcan
                                                                 <!-- Details Option (This is shown by default)-->
                                                                 <li>
                                                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#surveyModal{{ $survey->id }}">Details</a>
                                                                 </li>
                                                             </ul>
                                                         </div>
+
+                                                        @can('Approve Surveys')
 
                                                         <!-- Approve Survey Modal -->
                                                         <div class="modal fade" id="approveModal{{ $survey->id }}" tabindex="-1" aria-labelledby="approveModalLabel{{ $survey->id }}" aria-hidden="true">
@@ -100,6 +104,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @endcan
                                                     @else
                                                         <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#surveyModal{{ $survey->id }}">Details</a>
                                                     @endif
