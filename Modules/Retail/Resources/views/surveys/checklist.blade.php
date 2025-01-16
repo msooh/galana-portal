@@ -103,28 +103,29 @@
 
                             <!-- Signature Pad -->
                             <div class="form-step" id="step-signature" style="display: none;">
-                                <h3>Station Signature</h3>
-                                <p>This section is to be filled by either the Dealer or Station Manager</p>
+                                <h3>TM Signature</h3>
+                                <p>This section is to be filled by the Territory Manager</p>
                                 <div>
                                     <canvas id="signatureCanvas" width="400" height="200" style="border: 1px solid black;"></canvas>
                                     <!-- Hidden input for signature image -->
                                     <input type="hidden" id="signature" name="signature_image">
                                 </div>
                                 <button type="button" class="btn btn-danger mt-3" onclick="clearSignature()">Clear Signature</button>
-                                <div class="form-group mt-3 mb-3">
-                                    <label for="role">Select Your Role</label>
-                                    <select class="form-control" id="role" name="role" required>
-                                        <option value="Dealer">Dealer</option>
-                                        <option value="Station Manager">Station Manager</option>
-                                    </select>
-                                </div>
+                                <!--<div class="form-group mt-3 mb-3">
+                                        <label for="role">Select Your Role</label>
+                                        <select class="form-control" id="role" name="role" required>
+                                            <option value="Dealer">Dealer</option>
+                                            <option value="Station Manager">Station Manager</option>
+                                        </select>
+                                    </div>
+                                -->
                             </div>
                         </div>
                         <div style="overflow:auto;">
                             <div style="float:right;">
                                 <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                                 <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
-                                <button type="submit" class="btn btn-primary" id="submitButton" style="display: none;">Submit</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton" style="display: none;" disabled>Submit</button>
                             </div>
                         </div>
 
@@ -320,17 +321,15 @@
     });
 
     function saveSignature() {
-    if (!ctx || ctx.getImageData(0, 0, canvas.width, canvas.height).data.reduce((a, b) => a + b) === 0) {
-        Swal.fire({
-        title: 'Oops...',
-        text: 'Please provide a signature before proceeding.',
-        icon: 'error'
-        });
-        return false;
-    }
-    var dataURL = canvas.toDataURL('image/png');
-    document.getElementById("signature").value = dataURL;
-    return true;
+        var signatureInput = document.getElementById("signature");
+        if (!ctx || ctx.getImageData(0, 0, canvas.width, canvas.height).data.reduce((a, b) => a + b) === 0) {            
+            submitButton.disabled = true; // Disable submit button if signature is not provided
+            return false;
+        }
+        var dataURL = canvas.toDataURL('image/png');
+        signatureInput.value = dataURL;
+        submitButton.disabled = false; // Enable submit button once signature is provided
+        return true;
     }
 
     function clearSignature() {
