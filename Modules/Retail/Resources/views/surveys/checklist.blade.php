@@ -77,7 +77,7 @@
                                                 </td>
                                                 @if($category->type === 'attachment')
                                                 <td>
-                                                    <input type="file" name="responses[{{ $item->id }}][file]" accept="image/*">
+                                                    <input type="file" name="responses[{{ $item->id }}][file]" accept="image/*" capture="user|environment">
                                                 </td>
                                                 @elseif($category->type === 'weight')
                                                 <td>
@@ -147,8 +147,12 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
-
+<script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
+<script>
+    window.onload = function() {
+        initMap();
+    };
+</script>
 <script>
     var currentStep = 0;
     var formSteps = document.getElementsByClassName("form-step");

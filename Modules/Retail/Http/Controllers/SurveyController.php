@@ -214,7 +214,7 @@ class SurveyController extends Controller
                 'john.muchunu@galanaenergies.com', 
                 'faith.muthoni@galanaenergies.com',
                 'julius.peter@galanaenergies.com'
-                ])->send(new SurveyRfeportMail($surveyDetails, $url, $pdfContent));
+                ])->send(new SurveyReportMail($surveyDetails, $url, $pdfContent));
             // Return success message
             return redirect()->route('surveys.index')->with('success', 'Survey submitted successfully!');
             } catch (\Exception $e) {
