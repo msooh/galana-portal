@@ -94,7 +94,7 @@ class SurveyController extends Controller
                 'responses.*.comment' => 'nullable|string',
                 'responses.*.weight' => 'nullable|numeric|in:1,2,3',
                 'responses.*.file' => 'nullable|file|image|max:4096',           
-                //'role' => 'required|string|in:Dealer,Station Manager',
+                'role' => 'required|string|in:Dealer,Station Manager',
                 'signature_image' => 'required|string',
                 'comment' => 'nullable|string|max:1000',           
                 'latitude' => 'required|numeric',
@@ -154,7 +154,7 @@ class SurveyController extends Controller
     
             $signature = new Signature([
                 'survey_id' => $survey->id,
-                'role' => 'Territory Manager (TM)', 
+                'role' => $validatedData['role'], 
                 'signature_image' => 'signatures/' . $filename,
             ]);
             $signature->save();

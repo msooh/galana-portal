@@ -103,22 +103,21 @@
 
                             <!-- Signature Pad -->
                             <div class="form-step" id="step-signature" style="display: none;">
-                                <h3>TM Signature</h3>
-                                <p>This section is to be filled by the Territory Manager</p>
+                                <h3>Signature</h3>
+                                <p>This section is to be filled by either the Dealer or Station Manager</p>
                                 <div>
                                     <canvas id="signatureCanvas" width="400" height="200" style="border: 1px solid black;"></canvas>
                                     <!-- Hidden input for signature image -->
                                     <input type="hidden" id="signature" name="signature_image">
                                 </div>
                                 <button type="button" class="btn btn-danger mt-3" onclick="clearSignature()">Clear Signature</button>
-                                <!--<div class="form-group mt-3 mb-3">
+                                <div class="form-group mt-3 mb-3">
                                         <label for="role">Select Your Role</label>
                                         <select class="form-control" id="role" name="role" required>
                                             <option value="Dealer">Dealer</option>
                                             <option value="Station Manager">Station Manager</option>
                                         </select>
                                     </div>
-                                -->
                             </div>
                         </div>
                         <div style="overflow:auto;">
