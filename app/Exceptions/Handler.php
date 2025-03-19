@@ -16,6 +16,13 @@ class Handler extends ExceptionHandler
         //
     ];
 
+    public function report(Throwable $exception)
+    {
+        \Log::error('Unhandled Exception:', ['error' => $exception->getMessage(), 'trace' => $exception->getTraceAsString()]);
+        parent::report($exception);
+    }
+
+
     /**
      * A list of the exception types that are not reported.
      *

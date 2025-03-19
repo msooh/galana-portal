@@ -8,6 +8,7 @@
     <meta name="description" content="Retail Quality Checklist">
     <meta name="author" content="Galana Energies">
     <meta name="keyword" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Retail Module')</title>
 
     <!-- Favicon -->
@@ -50,12 +51,11 @@
         <div class="body flex-grow-1 px-3">
             @yield('content')
         </div>
-
         @include('layouts.footer')
     </div>
 
     <!-- CoreUI and necessary plugins-->
-    <script src="{{ asset('vendors/jquery/jquery.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('vendors/jquery/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
     <script src="{{ asset('vendors/simplebar/js/simplebar.min.js') }}"></script>
@@ -80,9 +80,6 @@
     <!-- SweetAlert -->
     <script src="{{ asset('vendors/sweetalerts/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendors/sweetalerts/custom-sweetalert.js') }}"></script>
-
-    <!-- Main scripts -->
-    <script src="{{ asset('js/main.js') }}"></script>
 
     @yield('scripts')
 </body>

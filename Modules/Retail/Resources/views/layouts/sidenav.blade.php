@@ -37,6 +37,7 @@
                     </li>
                 @endforeach
                 <li class="nav-item"><a class="nav-link" href="{{ route('surveys.index') }}"> History</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('surveys.continue') }}"> Incomplete Surveys</a></li>
             </ul>
         </li>
         @can('Manage Checklists')

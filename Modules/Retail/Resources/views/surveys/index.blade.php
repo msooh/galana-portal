@@ -36,7 +36,6 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 @php
-                                                    // Assuming each survey has a list of responses
                                                     $firstResponse = $survey->responses->first();
                                                     $categoryName = 'N/A'; 
                                             

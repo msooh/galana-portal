@@ -7,21 +7,26 @@
             <div class="card">
                 <div class="card-header">Create New Survey for {{ $category->name }}</div>
                 <div class="card-body">
-                    <form id="regForm" action="{{ route('surveys.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="regForm" action="{{ route('survey.saveOrSubmit') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
+                        <input type="hidden" name="category_id" value="{{ $category->id }}">
+                        <input type="hidden" name="category_name" value="{{ $category->name }}">
                         <input type="hidden" name="latitude" id="latitude">
                         <input type="hidden" name="longitude" id="longitude">
+                        <input type="hidden" name="action" value="save">
                         <div class="form-group">
                             <label for="station_id">Select Station:</label>
                             <select class="form-select" id="station_id" name="station_id" required>
                                 <option value="">Select Station</option>
                                 @foreach($stations as $station)
-                                    <option value="{{ $station->id }}">{{ $station->name }}</option>
+                                <option value="{{ $station->id }}" 
+                                    {{ old('station_id', $savedSurvey->station_id ?? '') == $station->id ? 'selected' : '' }}>
+                                    {{ $station->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
-
                         <div id="formSteps">
                             @foreach($category->subcategories as $index => $subcategory)
                             <div class="form-step{{ $index === 0 ? ' active' : '' }}" id="step-{{ $index }}">
@@ -56,41 +61,55 @@
                                             @foreach($subcategory->checklists as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->name }}</td>                                                   
+
+                                            
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="Yes" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="Yes"
+                                                            {{ old("responses.{$item->id}.response", $savedResponses[$item->id]['response'] ?? '') == 'Yes' ? 'checked' : '' }}>
+
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="No" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="No"
+                                                            {{ old("responses.{$item->id}.response", $savedResponses[$item->id]['response'] ?? '') == 'No' ? 'checked' : '' }}>
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label class="custom-radio">
-                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="N/A" required>
+                                                        <input type="radio" name="responses[{{ $item->id }}][response]" value="N/A"
+                                                        {{ old("responses.{$item->id}.response", $savedResponses[$item->id]['response'] ?? '') == 'N/A' ? 'checked' : '' }}>
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </td>
                                                 @if($category->type === 'attachment')
                                                 <td>
+                                                    @php
+                                                        $filePath = $savedResponses['responses'][$item->id]['file'] ?? null;
+                                                    @endphp
+
+                                                    @if($filePath)
+                                                        <a href="{{ asset('storage/' . $filePath) }}" target="_blank">View Attachment</a>
+                                                    @endif
+                                                    
                                                     <input type="file" name="responses[{{ $item->id }}][file]" accept="image/*" capture="user|environment">
                                                 </td>
                                                 @elseif($category->type === 'weight')
                                                 <td>
                                                     <select name="responses[{{ $item->id }}][weight]" class="form-select">
                                                         <option value="">Select weight</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
+                                                        <option value="1" {{ isset($savedResponses[$item->id]['weight']) && $savedResponses[$item->id]['weight'] == '1' ? 'selected' : ''}}>1</option>
+                                                        <option value="2" {{ isset($savedResponses[$item->id]['weight']) && $savedResponses[$item->id]['weight'] == '2' ? 'selected' : '' }}>2</option>
+                                                        <option value="3" {{ isset($savedResponses[$item->id]['weight']) && $savedResponses[$item->id]['weight'] == '3' ? 'selected' : '' }}>3</option>
                                                     </select>
                                                 </td>
                                                 @elseif($category->type === 'comment')
                                                 <td>
-                                                    <textarea class="form-control" name="responses[{{ $item->id }}][comment]"></textarea>
+                                                    <textarea class="form-control" name="responses[{{ $item->id }}][comment]">{{ $savedResponses[$item->id]['comment'] ?? '' }}</textarea>
                                                 </td>
                                                 @endif
                                             </tr>
@@ -100,7 +119,6 @@
                                 </div>
                             </div>
                             @endforeach
-
                             <!-- Signature Pad -->
                             <div class="form-step" id="step-signature" style="display: none;">
                                 <h3>Signature</h3>
@@ -112,30 +130,32 @@
                                 </div>
                                 <button type="button" class="btn btn-danger mt-3" onclick="clearSignature()">Clear Signature</button>
                                 <div class="form-group mt-3 mb-3">
-                                        <label for="role">Select Your Role</label>
-                                        <select class="form-control" id="role" name="role" required>
-                                            <option value="Dealer">Dealer</option>
-                                            <option value="Station Manager">Station Manager</option>
-                                        </select>
-                                    </div>
+                                    <label for="role">Select Your Role</label>
+                                    <select class="form-control" id="role" name="role" required>
+                                        <option value="Dealer">Dealer</option>
+                                        <option value="Station Manager">Station Manager</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div style="overflow:auto;">
                             <div style="float:right;">
                                 <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                                 <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
-                                <button type="submit" class="btn btn-primary" id="submitButton" style="display: none;" disabled>Submit</button>
+                                <button type="submit" name="action" value="submit" class="btn btn-primary" id="submitButton" style="display: none;" disabled>Submit</button>
+                                <button type="submit" name="action" value="save" class="btn btn-warning" id="saveProgressButton" formnovalidate>
+                                    <i class="fas fa-save"></i> Save Progress
+                                </button>                                                              
                             </div>
                         </div>
-
                         <!-- Circles which indicate the steps of the form -->
                         <div style="text-align:center;margin-top:40px;">
                             @foreach($category->subcategories as $index => $subcategory)
                                 <span class="step{{ $index === 0 ? ' active' : '' }}"></span>
                             @endforeach
                             <span class="step"></span> <!-- Signature Step -->
-                        </div>
-                    </form>
+                        </div> 
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -143,14 +163,64 @@
 </div>
 
 <!-- Bootstrap 4 JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
-<script>
+
+<script>        
     window.onload = function() {
         initMap();
     };
+    
+</script>
+<script>
+    document.getElementById('saveProgressButton').addEventListener('click', function(e) {
+    e.preventDefault(); 
+
+    // Get the form data
+    let formData = new FormData(document.getElementById('regForm'));
+    console.log("Form data being sent to:", '{{ route('survey.saveOrSubmit') }}');
+
+    // Using jQuery's AJAX method for more control
+    $.ajax({
+        url: '{{ route('survey.saveOrSubmit') }}', 
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log("Response from server:", response);
+            if (response.success) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Progress saved successfully!',
+                    icon: 'success'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to save progress.',
+                    icon: 'error'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            // Log the error for debugging purposes
+            console.error("Error in AJAX request:", error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while saving progress.',
+                icon: 'error'
+            });
+        }
+    });
+});
+
+
 </script>
 <script>
     var currentStep = 0;
@@ -247,7 +317,7 @@
 
     // Signature Pad Implementation
     var canvas = document.getElementById("signatureCanvas");
-    var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     var isDrawing = false;
     var lastX = 0;
     var lastY = 0;
@@ -336,14 +406,14 @@
     }
 
     function clearSignature() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("signature").value = '';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById("signature").value = '';
     }
 
     document.getElementById('regForm').addEventListener('submit', function (event) {
-    if (!saveSignature()) {
-        event.preventDefault(); // Prevent form submission if validation fails
-    }
+        if (!saveSignature()) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
     });
 
     function initMap() {

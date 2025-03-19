@@ -127,6 +127,18 @@
                         </div>
                     </a>
                 </div>
+                @endcan
+                @can('Training Module')
+                <div class="module-card">
+                    <a href="{{ route('training.index') }}" class="counter-link">
+                        <div class="counter blue">
+                            <div class="counter-icon">
+                                <i class="fa fa-chalkboard-teacher"></i>
+                            </div>                       
+                            <h3>Training Module</h3>
+                        </div>
+                    </a>
+                </div>
                 @endcan                
             </div>
         </div>      

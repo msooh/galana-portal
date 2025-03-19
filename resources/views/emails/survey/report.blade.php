@@ -64,6 +64,10 @@
                 <td>{{ $surveyDetails['type'] }}</td>
             </tr>
             <tr>
+                <td class="header-cell">Station Name:</td>
+                <td>{{ $surveyDetails['station_name'] }}</td>
+            </tr>
+            <tr>
                 <td class="header-cell">Total Marks:</td>
                 <td>{{ number_format($surveyDetails['total_marks'], 2) }}%</td>
             </tr>

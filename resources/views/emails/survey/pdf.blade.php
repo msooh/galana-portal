@@ -19,7 +19,7 @@
             margin-bottom: 20px;
         }
         .header img {
-            max-height: 60px;
+            max-height: 80px;
         }
         .details {
             text-align: right;
@@ -44,7 +44,28 @@
             text-align: left;
         }
         th {
+            background-color: #283c98;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #d4e3fc;
+        }
+
+        td a {
+            color: #283c98;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        td a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -52,7 +73,7 @@
     <!-- Header Section -->
     <div class="header">
         <!-- Logo on the left -->
-        <img src="{{ asset('assets/img/New logo-01.png') }}" alt="Company Logo">
+        <img src="{{ base_path('public/assets/img/New logo-01.png') }}" alt="Company Logo">
         <!-- Station Details on the right -->
         <div class="details">
             <p><strong>Station:</strong> {{ $survey->station->name }}</p>
@@ -74,6 +95,13 @@
 
     <!-- Survey Responses Table -->
     <h3>Survey Responses</h3>
+    @php
+        // Check which fields are available in the survey responses
+        $hasWeight = $survey->responses->contains(fn($response) => !is_null($response->weight));
+        $hasAttachment = $survey->responses->contains(fn($response) => !is_null($response->file_path));
+        $hasComment = $survey->responses->contains(fn($response) => !is_null($response->comment));
+    @endphp
+
     <table>
         <thead>
             <tr>
@@ -81,9 +109,9 @@
                 <th>Category</th>
                 <th>Checklist Item</th>
                 <th>Response</th>
-                <th>Weight</th>
-                <th>Attachment</th>
-                <th>Comment</th>
+                @if($hasWeight) <th>Weight</th> @endif
+                @if($hasAttachment) <th>Attachment</th> @endif
+                @if($hasComment) <th>Comment</th> @endif
             </tr>
         </thead>
         <tbody>
@@ -96,15 +124,15 @@
                     <td>{{ $item->subcategory->name ?? 'N/A' }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $response->response }}</td>
-                    <td>{{ $response->weight ?? 'No Weight' }}</td>
-                    <td>
-                        @if($response->file_path)
-                            <a href="{{ asset($response->file_path) }}" target="_blank">View Attachment</a>
-                        @else
-                            No Attachment
-                        @endif
-                    </td>
-                    <td>{{ $response->comment ?? 'No Comment' }}</td>
+                    @if($hasWeight) <td>{{ $response->weight }}</td> @endif
+                    @if($hasAttachment)
+                        <td>
+                            @if($response->file_path)
+                                <a href="{{ asset($response->file_path) }}" target="_blank">View Attachment</a>
+                            @endif
+                        </td>
+                    @endif
+                    @if($hasComment) <td>{{ $response->comment }}</td> @endif
                 </tr>
             @endforeach
         </tbody>
