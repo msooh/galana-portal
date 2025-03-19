@@ -346,13 +346,14 @@
                 title: 'Survey Location'
             });
         @else
+            var mapContainerId = 'map{{ $survey->id }}';
             var mapOptions = {
                 zoom: 3,
                 center: { lat: 0, lng: 0 },
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
-            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            var map = new google.maps.Map(document.getElementById(mapContainerId), mapOptions);
 
             var infoWindow = new google.maps.InfoWindow({
                 content: "Location data not available"
@@ -362,5 +363,8 @@
         @endif
     @endforeach
 }
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+});
 </script>
 @endsection

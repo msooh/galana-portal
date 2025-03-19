@@ -35,21 +35,27 @@ class SurveyController extends Controller
     public function index()
     {        
         // Fetch surveys and their related data
-        $surveys = Survey::with(['station', 'creator', 'approver', 'responses.checklistItem.subcategory.category'])
-            ->latest()
-            ->get();
-            
-        // Fetch categories and subcategories
-        $categories = Category::with('subcategories.checklists')->get();
+        $surveys = Survey::with([
+            'station:id,name',
+            'creator:id,name',
+            'approver:id,name',
+            'responses' => function ($query) {
+                $query->select('id', 'survey_id', 'checklist_item_id');
+            },
+            'responses.checklistItem:id,sub_category_id',
+            'responses.checklistItem.subcategory:id,category_id',
+            'responses.checklistItem.subcategory.category:id,name'
+        ])
+        ->select('id', 'station_id', 'created_by', 'approved_by', 'date', 'time', 'total_marks', 'status', 'comment')
+        ->latest()
+        ->paginate(20); // Paginate with 20 records per page
 
-        // Define subcategories as a flat list or however you need them
-        $subcategories = Subcategory::with('checklists')->get(); // Adjust based on your structure
+        // Fetch categories and subcategories separately to avoid redundant loading
+        $categories = Category::with('subcategories:id,category_id')->select('id', 'name')->get();
+        $subcategories = Subcategory::with('checklists:id,sub_category_id,name')->select('id', 'category_id', 'name')->get();
 
-        return view('retail::surveys.index', [
-            'surveys' => $surveys,
-            'categories' => $categories,
-            'subcategories' => $subcategories
-        ]);
+        return view('retail::surveys.index', compact('surveys', 'categories', 'subcategories'));
+
     }
 
     /**
