@@ -285,6 +285,7 @@ class SurveyController extends Controller
     {
 
         $emails = $this->getRecipientEmails($survey->station_id);
+        //$emails = collect(['faith.muthoni@galanaenergies.com']);
 
         if ($emails->isEmpty()) {
             throw new \Exception('No valid recipients found for the survey report.');

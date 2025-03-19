@@ -76,7 +76,8 @@ class SurveyReportMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Survey Report')
+        $subject = 'Survey Report - ' . ($this->surveyDetails['station_name'] ?? 'Unknown Station');
+        return $this->subject($subject)
                     ->view('emails.survey.report')
                     ->attachData($this->pdfContent, 'survey-report.pdf', [
                         'mime' => 'application/pdf',
