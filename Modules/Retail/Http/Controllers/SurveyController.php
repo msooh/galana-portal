@@ -68,13 +68,19 @@ class SurveyController extends Controller
         $categories = Category::all();
         $category = Category::with('subcategories.checklists')->findOrFail($categoryId);
         $user = Auth::user();        
-        
+
         // Fetch stations based on user role
-        $stations = match (true) {
-            $user->hasRole(['Admin', 'Retail Manager', 'Team Coach', 'Head of Retail']) => Station::all(),
-            $user->hasRole('Territory Manager (TM)') => $user->stations,
-            default => collect(),
-        };
+        if ($user->hasRole('Admin') || 
+            $user->hasRole('Retail Manager') || 
+            $user->hasRole('Team Coach') || 
+            $user->hasRole('Head of Retail')) {
+            $stations = Station::all();
+        } elseif ($user->hasRole('Territory Manager (TM)')) {
+            $stations = $user->stations;
+        } else {
+            $stations = collect();
+        }
+
         // Retrieve saved survey responses from the database
         $savedSurvey = TemporarySurvey::where('user_id', $user->id)
             ->where('category_id', $categoryId)

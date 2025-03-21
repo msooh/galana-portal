@@ -296,10 +296,6 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
-<!--<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>-->
-
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-ermIwyEWez3cLATTNMw5ksOoyZjs188&callback=initMap"></script>
 
 <script>
